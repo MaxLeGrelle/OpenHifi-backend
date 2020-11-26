@@ -46,3 +46,7 @@ Content-Type: application/json
 ### get user list
 GET http://localhost:9090/users/
 Authorization: {{userToken}}
+
+### get user list wrong token
+GET http://localhost:9090/users/
+Authorization: 1234
