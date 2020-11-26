@@ -11,11 +11,33 @@ class User {
         this.password = password;
     }
 
-    save() {
-        const userList = getUsersFromFile(FILE_PATH);
-        userList.push(this);
-        console.log("save userList updated : ", userList)
-        saveUserListToFile(FILE_PATH, userList);
+    /**
+     * Ajoute de maniere asynchrone this à la liste des users et sauvegarde la liste modifié
+     */
+    async save() {
+        try {
+            const userList = getUsersFromFile(FILE_PATH);
+            userList.push(this);
+            console.log("save userList updated : ", userList)
+            saveUserListToFile(FILE_PATH, userList);
+            return true;
+        }catch(err) {return false}
+    }
+
+    /**
+     * Return le User avec l'email email et le mot de passe password depuis la liste des users
+     * @param {*} email l'email du user
+     * @param {*} password le mot de passe du user
+     */
+    static checkLoginData(email, password) {
+        if (!email || !password) return null;
+        const userList = User.getList();
+        console.log("getUser userList : ", userList)
+        const userFound = userList.find((user) => { 
+            return user.email === email && user.password === password
+        })
+        console.log("getUser userFound", userFound);
+        return userFound;
     }
 
     /**
@@ -41,7 +63,7 @@ function saveUserListToFile(filePath, userList){
 }
 
 /**
- * Récupére la liste des users se trouvant dans filePath, 
+ * Récupere la liste des users se trouvant dans filePath, 
  * return une liste vide si le fichier n'a pas été trouvé
  * @param {*} filePath le chemin vers le fichier
  */
