@@ -1,6 +1,17 @@
 ### get user list
 GET http://localhost:9090/users/
 
+
+### post a new admin
+POST http://localhost:9090/users/register
+Content-Type: application/json
+
+{
+    "email" : "max.legrelle@student.vinci.be",
+    "pseudo" : "Vhalia",
+    "password" : "admin"
+}
+
 ### post a new user
 POST http://localhost:9090/users/register
 Content-Type: application/json

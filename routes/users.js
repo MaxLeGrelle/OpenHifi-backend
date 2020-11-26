@@ -16,9 +16,11 @@ router.post('/register', function(req, res, next) {
 })
 
 router.post('/login', function(req, res, next) {
-  const userToFind = User.checkLoginData(req.body.email, req.body.password)
-  if (!userToFind) return res.status(403).send("Mauvais email ou mot de passe")
-  return res.json(userToFind);
+  User.checkLoginData(req.body.email, req.body.password).then((match) => {
+    if (match) return res.json({email : req.body.email});
+    else return res.status(401).send("Mauvais email ou mot de passe")
+  })
+  
 })
 
 module.exports = router;

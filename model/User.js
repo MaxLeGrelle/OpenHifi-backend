@@ -1,7 +1,8 @@
 "use strict"
 const fs = require("fs")
+const bcrypt = require("bcrypt");
 const FILE_PATH = __dirname + "/data/users.json";
-
+const SALT_ROUNDS= 10;
 
 
 class User {
@@ -17,6 +18,7 @@ class User {
     async save() {
         try {
             const userList = getUsersFromFile(FILE_PATH);
+            this.password = await bcrypt.hash(this.password, SALT_ROUNDS)
             userList.push(this);
             console.log("save userList updated : ", userList)
             saveUserListToFile(FILE_PATH, userList);
@@ -24,17 +26,27 @@ class User {
         }catch(err) {return false}
     }
 
+    static async checkLoginData(email , password) {
+        if (!email || !password) return false;
+        console.log(password)
+        const userToVerify = User.getUserFromEmail(email);
+        if (!userToVerify) return false;
+        try {
+            return await bcrypt.compare(password, userToVerify.password)
+        }catch(err){return false}
+    }
+
     /**
      * Return le User avec l'email email et le mot de passe password depuis la liste des users
      * @param {*} email l'email du user
      * @param {*} password le mot de passe du user
      */
-    static checkLoginData(email, password) {
-        if (!email || !password) return null;
+    static getUserFromEmail(email) {
+        if (!email) return null;
         const userList = User.getList();
         console.log("getUser userList : ", userList)
         const userFound = userList.find((user) => { 
-            return user.email === email && user.password === password
+            return user.email === email
         })
         console.log("getUser userFound", userFound);
         return userFound;
