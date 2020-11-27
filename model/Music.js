@@ -5,10 +5,10 @@ const FILE_PATH = __dirname + "/data/musics.json";
 
 class Music{
 
-    constructor(title, filePath, creator, tag){
+    constructor(title, filePath, idCreator, tag){
         this.title = title;
         this.filePath = filePath;
-        this.creator = creator;
+        this.idCreator = idCreator;
         this.tag = tag;
     }
 
@@ -31,6 +31,13 @@ class Music{
     static getList(){
         console.log("Music getList");
         return getMusicsFromFile(FILE_PATH);
+    }
+
+    static getListMusicFromId(id) {
+        const musicList = Music.getList();
+        return musicList.filter(music => {
+            return music.idCreator == id;
+        })
     }
 
 }

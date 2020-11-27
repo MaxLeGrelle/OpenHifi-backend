@@ -50,3 +50,6 @@ Authorization: {{userToken}}
 ### get user list wrong token
 GET http://localhost:9090/users/
 Authorization: 1234
+
+### get music list from the user with the id in the url
+GET http://localhost:9090/users/profil/1

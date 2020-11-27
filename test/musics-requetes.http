@@ -9,6 +9,28 @@ Content-Type: application/json
 {
     "title" : "tropPOPpourToi",
     "filePath": "C:\\document\\tropPoPpourToi.mp3",
-    "creator" : "max.legrelle@student.vinci.be",
+    "idCreator" : 1,
     "tag" : "pop"
+}
+
+### post ajout de musique 2
+POST http://localhost:9090/musics/add
+Content-Type: application/json
+
+{
+    "title" : "La dubstep oui",
+    "filePath": "C:\\document\\La_dubstep_oui.mp3",
+    "idCreator" : 1,
+    "tag" : "dubstep"
+}
+
+### post ajout de musique 3
+POST http://localhost:9090/musics/add
+Content-Type: application/json
+
+{
+    "title" : "Les vaches",
+    "filePath": "C:\\document\\jaimelesvaches.mp3",
+    "idCreator" : 2,
+    "tag" : "country"
 }

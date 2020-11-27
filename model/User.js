@@ -6,10 +6,11 @@ const SALT_ROUNDS= 10;
 
 
 class User {
-    constructor(email, pseudo, password) {
+    constructor(email, pseudo, password, id = User.incId()) {
         this.email = email;
         this.pseudo = pseudo;
         this.password = password;
+        this.id = id;
     }
 
     /**
@@ -24,6 +25,12 @@ class User {
             saveUserListToFile(FILE_PATH, userList);
             return true;
         }catch(err) {return false}
+    }
+
+    static incId() {
+        const userList = User.getList();
+        if (!userList || userList.length === 0) return 0;
+        return userList[userList.length-1].id + 1;
     }
 
     static async checkLoginData(email , password) {

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const User = require("../model/User.js")
+const Music = require("../model/Music.js")
 const jwt = require("jsonwebtoken");
 const authorize = require('../utils/auths.js');
 const jwtKey = "dsogi j-8 qsùfmlds!"
@@ -16,13 +17,19 @@ router.get('/', authorize, function(req, res, next) {
   return res.json(User.getList());
 });
 
+router.get('/profil/:id', function(req,res,next) {
+  const usersMusicList = Music.getListMusicFromId(req.params.id);
+  console.log("GET /profil/:id", usersMusicList)
+  return res.json(usersMusicList)
+})
+
 /* Register a new user */ 
 router.post('/register', function(req, res, next) {
   const newUser = new User(req.body.email, req.body.pseudo, req.body.password);
   newUser.save().then(() => {
-    jwt.sign({email : req.body.email}, jwtKey, {expiresIn : TOKEN_LIFETIME}, (err,token) => {
+    jwt.sign({email : req.body.email, id : newUser.id}, jwtKey, {expiresIn : TOKEN_LIFETIME}, (err,token) => {
       if (err) return res.status(500).send(err);
-      return res.json({email : req.body.email, token})
+      return res.json({email : req.body.email, id : newUser.id, token})
     })
   })
 })
@@ -30,7 +37,8 @@ router.post('/register', function(req, res, next) {
 router.post('/login', function(req, res, next) {
   User.checkLoginData(req.body.email, req.body.password).then((match) => {
     if (match) {
-      jwt.sign({email : req.body.email}, jwtKey, {expiresIn : TOKEN_LIFETIME}, (err,token) => {
+      const UserFound = User.getUserFromEmail(req.body.email);
+      jwt.sign({email : req.body.email, id : UserFound.id}, jwtKey, {expiresIn : TOKEN_LIFETIME}, (err,token) => {
         if (err) return res.status(500).send(err);
         return res.json({email : req.body.email, token})
       })
