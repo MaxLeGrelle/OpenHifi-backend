@@ -22,6 +22,16 @@ Content-Type: application/json
     "password" : "azerty"
 }
 
+### post a new user
+POST http://localhost:9090/users/register
+Content-Type: application/json
+
+{
+    "email" : "guest1@gmail.com",
+    "pseudo" : "guest1",
+    "password" : "azerty"
+}
+
 ### post login a good user
 # @name login
 POST http://localhost:9090/users/login

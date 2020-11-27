@@ -27,6 +27,25 @@ class User {
         }catch(err) {return false}
     }
 
+    /**
+     * Retourne une liste d'utilisateur correspondant à un ou plusieurs mot clé se trouvant dans keyWords
+     * @param {*} keyWords liste de mot(s) clé(s)
+     */
+    static async searchUsers(keyWords) {
+        try {
+            const userList = User.getList();
+            let result = [];
+            let found = [];
+            for (let i = 0; i < keyWords.length; i++) {
+                result = userList.filter((user) => {
+                    return user.pseudo.toLowerCase().includes(keyWords[i].toLowerCase())
+                })
+                Array.prototype.push.apply(found, result) //fusionne 2 tabs
+            }
+            return found;
+        }catch(err){return null}
+    }
+
     static incId() {
         const userList = User.getList();
         if (!userList || userList.length === 0) return 0;

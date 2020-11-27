@@ -6,11 +6,6 @@ router.get('/', function(req,res,next){
   return res.json(Music.getList());  
 })
 
-router.get('/:id', function (req, res, next) {
-    
-})
-
-
 router.post('/add', function(req, res, next){
     const newMusic = new Music(req.body.title, req.body.filePath, req.body.idCreator, req.body.tag);
     newMusic.save().then(()=> {
