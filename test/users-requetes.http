@@ -1,0 +1,52 @@
+### get user list notsafe
+GET http://localhost:9090/users/notsafe
+
+
+### post a new admin
+POST http://localhost:9090/users/register
+Content-Type: application/json
+
+{
+    "email" : "max.legrelle@student.vinci.be",
+    "pseudo" : "Vhalia",
+    "password" : "admin"
+}
+
+### post a new user
+POST http://localhost:9090/users/register
+Content-Type: application/json
+
+{
+    "email" : "guest@gmail.com",
+    "pseudo" : "guest",
+    "password" : "azerty"
+}
+
+### post login a good user
+# @name login
+POST http://localhost:9090/users/login
+Content-Type: application/json
+
+{
+    "email" : "guest@gmail.com",
+    "password" : "azerty"
+}
+### get token from last login
+@userToken = {{login.response.body.token}}
+
+### post login a wrong user
+POST http://localhost:9090/users/login
+Content-Type: application/json
+
+{
+    "email" : "guest@gmail.com",
+    "password" : "123"
+}
+
+### get user list
+GET http://localhost:9090/users/
+Authorization: {{userToken}}
+
+### get user list wrong token
+GET http://localhost:9090/users/
+Authorization: 1234
