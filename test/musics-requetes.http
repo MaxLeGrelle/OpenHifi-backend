@@ -1,0 +1,14 @@
+
+### get Music List
+GET http://localhost:9090/musics/
+
+### post ajout de musique
+POST http://localhost:9090/musics/add
+Content-Type: application/json
+
+{
+    "title" : "tropPOPpourToi",
+    "filePath": "C:\\document\\tropPoPpourToi.mp3",
+    "creator" : "max.legrelle@student.vinci.be",
+    "tag" : "pop"
+}
