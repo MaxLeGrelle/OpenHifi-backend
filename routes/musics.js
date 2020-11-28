@@ -35,4 +35,12 @@ router.put('/fav/:userId/:musicId', function(req, res, next) {
     })
 })
 
+router.get('/fav/:id', function (req,res,next) {
+    Music.getMusicFromId(req.params.id).then((musicFound) => {
+        if(!musicFound) return res.status(500).send("Probleme lors de la récupération de la musique depuis son id")
+        return res.json({id : musicFound.id, title : musicFound.title, likes : musicFound.nbrLikes});
+    })
+
+})
+
 module.exports = router;

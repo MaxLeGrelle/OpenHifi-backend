@@ -45,6 +45,13 @@ router.post('/login', function(req, res, next) {
     }else return res.status(401).send("Mauvais email ou mot de passe")
   })
   
+}) 
+
+router.get('/favs/:id', function(req,res,next) {
+  User.getUserFromId(req.params.id).then((userFound) => {
+    if(!userFound) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
+    return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
+  }).catch((err) => res.status(500).send(err.message))
 })
 
 module.exports = router;

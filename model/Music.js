@@ -37,7 +37,7 @@ class Music{
             const index = musicsList.findIndex((music) => music.id == musicFound.id)
             if (index < 0) return false;
             //unlike
-            if (User.isMusicLiked(userId, musicId)) {
+            if (await User.isMusicLiked(userId, musicId)) {
                 if(musicFound.nbrLikes == 0) return false;
                 musicFound.nbrLikes--;
             }else { //like

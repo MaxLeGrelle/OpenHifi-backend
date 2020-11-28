@@ -31,7 +31,7 @@ class User {
         try {
             if(!musicId || !userId) return false;
             let usersList = User.getList();
-            const userFound = User.getUserFromId(userId);
+            const userFound = await User.getUserFromId(userId);
             if (!userFound) return false;
             const index = usersList.findIndex((user) => user.id == userFound.id)
             if (index < 0) return false;
@@ -53,11 +53,12 @@ class User {
         
     }
 
-    static isMusicLiked(userId, musicId) {
-        const userFound = User.getUserFromId(userId);
+    static async isMusicLiked(userId, musicId) {
+        const userFound = await User.getUserFromId(userId);
         return userFound.musicsLiked.find((musicLikedId) => {
-                return musicLikedId == musicId;
+            return musicLikedId == musicId;
         })
+        
     }
 
     /**
@@ -109,13 +110,16 @@ class User {
         return userFound;
     }
 
-    static getUserFromId(id) {
-        if (!id) return null;
-        const userList = User.getList();
-        const userFound = userList.find((user) => { 
-            return user.id == id
-        })
-        return userFound;
+    static async getUserFromId(id) {
+        try {
+            if (!id) return null;
+            const userList = User.getList();
+            const userFound = userList.find((user) => { 
+                return user.id == id
+            })
+            return userFound;
+        }catch(err){return err}
+        
     }
 
     /**
