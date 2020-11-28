@@ -18,7 +18,7 @@ router.get('/', authorize, function(req, res, next) {
 });
 
 router.get('/profil/:id', function(req,res,next) {
-  const usersMusicList = Music.getListMusicFromId(req.params.id);
+  const usersMusicList = Music.getListMusicFromIdCreator(req.params.id);
   console.log("GET /profil/:id", usersMusicList)
   return res.json(usersMusicList)
 })

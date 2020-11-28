@@ -6,11 +6,12 @@ const SALT_ROUNDS= 10;
 
 
 class User {
-    constructor(email, pseudo, password, id = User.incId()) {
+    constructor(email, pseudo, password, id = User.incId(), musicsLiked = []) {
         this.email = email;
         this.pseudo = pseudo;
         this.password = password;
         this.id = id;
+        this.musicsLiked = musicsLiked;
     }
 
     /**
@@ -21,10 +22,42 @@ class User {
             const userList = getUsersFromFile(FILE_PATH);
             this.password = await bcrypt.hash(this.password, SALT_ROUNDS)
             userList.push(this);
-            console.log("save userList updated : ", userList)
             saveUserListToFile(FILE_PATH, userList);
             return true;
         }catch(err) {return false}
+    }
+
+    static async updateMusicsLiked(musicId, userId) {
+        try {
+            if(!musicId || !userId) return false;
+            let usersList = User.getList();
+            const userFound = User.getUserFromId(userId);
+            if (!userFound) return false;
+            const index = usersList.findIndex((user) => user.id == userFound.id)
+            if (index < 0) return false;
+            const i = userFound.musicsLiked.indexOf(musicId)
+            console.log("updateMusicsLiked :: i =", i)
+            //unlike
+            if (i >= 0) {
+                userFound.musicsLiked.splice(i, 1);
+            }else { //like
+                userFound.musicsLiked.push(musicId)
+            }
+            usersList[index] = userFound;
+            saveUserListToFile(FILE_PATH, usersList)
+            return true;
+        }catch (err){
+            console.log("ERREUR", err)
+            return false
+        }
+        
+    }
+
+    static isMusicLiked(userId, musicId) {
+        const userFound = User.getUserFromId(userId);
+        return userFound.musicsLiked.find((musicLikedId) => {
+                return musicLikedId == musicId;
+        })
     }
 
     /**
@@ -70,11 +103,18 @@ class User {
     static getUserFromEmail(email) {
         if (!email) return null;
         const userList = User.getList();
-        console.log("getUser userList : ", userList)
         const userFound = userList.find((user) => { 
             return user.email === email
         })
-        console.log("getUser userFound", userFound);
+        return userFound;
+    }
+
+    static getUserFromId(id) {
+        if (!id) return null;
+        const userList = User.getList();
+        const userFound = userList.find((user) => { 
+            return user.id == id
+        })
         return userFound;
     }
 
@@ -82,7 +122,6 @@ class User {
      * Récupere la liste des users du fichier users.json
      */
     static getList() {
-        console.log("User getList")
         return getUsersFromFile(FILE_PATH);
     }
 
@@ -96,7 +135,6 @@ class User {
  */
 function saveUserListToFile(filePath, userList){
     const userListToJson = JSON.stringify(userList);
-    console.log("Write userList to file : ", userListToJson);
     fs.writeFileSync(filePath, userListToJson);
 }
 
@@ -108,7 +146,6 @@ function saveUserListToFile(filePath, userList){
 function getUsersFromFile(filePath) {
     if (!fs.existsSync(filePath)) return [];
     const rawData = fs.readFileSync(filePath);
-    console.log("Read user file raw data : " + rawData)
     if (!rawData) return [];
     return JSON.parse(rawData);
 }

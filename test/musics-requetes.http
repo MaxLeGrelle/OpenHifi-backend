@@ -34,3 +34,9 @@ Content-Type: application/json
     "idCreator" : 2,
     "tag" : "country"
 }
+
+### put like musique 1 du user 1
+PUT http://localhost:9090/musics/fav/1/1
+
+### put like musique 1 du user 2
+PUT http://localhost:9090/musics/fav/2/1
