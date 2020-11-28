@@ -31,7 +31,7 @@ router.post('/register', function(req, res, next) {
       if (err) return res.status(500).send(err);
       return res.json({email : req.body.email, id : newUser.id, token})
     })
-  })
+  }).catch((err) => res.status(500).send(err.message))
 })
 
 router.post('/login', function(req, res, next) {
@@ -49,7 +49,7 @@ router.post('/login', function(req, res, next) {
 
 router.get('/favs/:id', function(req,res,next) {
   User.getUserFromId(req.params.id).then((userFound) => {
-    if(!userFound) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
+    if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
     return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
   }).catch((err) => res.status(500).send(err.message))
 })

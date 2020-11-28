@@ -1,3 +1,4 @@
+const { response } = require('express');
 var express = require('express');
 var router = express.Router();
 const Music = require("../model/Music.js");
@@ -9,13 +10,15 @@ router.get('/', function(req,res,next){
 
 router.post('/add', function(req, res, next){
     const newMusic = new Music(req.body.title, req.body.filePath, req.body.idCreator, req.body.tag);
-    newMusic.save().then(()=> {
-        return res.json({
-            title : req.body.title,
-            filePath : req.body.filePath,
-            idCreator : req.body.idCreator 
-        })
-    })
+    newMusic.save().then((saved)=> {
+        if(saved) {
+            return res.json({
+                title : req.body.title,
+                filePath : req.body.filePath,
+                idCreator : req.body.idCreator 
+            })
+        }
+    }).catch((err) => res.status(500).send(err.message))
 })
 
 router.put('/fav/:userId/:musicId', function(req, res, next) {
@@ -37,9 +40,8 @@ router.put('/fav/:userId/:musicId', function(req, res, next) {
 
 router.get('/fav/:id', function (req,res,next) {
     Music.getMusicFromId(req.params.id).then((musicFound) => {
-        if(!musicFound) return res.status(500).send("Probleme lors de la récupération de la musique depuis son id")
         return res.json({id : musicFound.id, title : musicFound.title, likes : musicFound.nbrLikes});
-    })
+    }).catch((err) => res.status(500).send(err.message))
 
 })
 

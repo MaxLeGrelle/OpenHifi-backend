@@ -46,10 +46,7 @@ class User {
             usersList[index] = userFound;
             saveUserListToFile(FILE_PATH, usersList)
             return true;
-        }catch (err){
-            console.log("ERREUR", err)
-            return false
-        }
+        }catch (err){return false}
         
     }
 
@@ -77,7 +74,7 @@ class User {
                 Array.prototype.push.apply(found, result) //fusionne 2 tabs
             }
             return found;
-        }catch(err){return null}
+        }catch(err){return err}
     }
 
     static incId() {

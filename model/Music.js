@@ -25,7 +25,7 @@ class Music{
             console.log("save musicList updated : ", musicList)
             saveMusicListToFile(FILE_PATH, musicList);
             return true;
-        }catch(err) {return false}
+        }catch(err) {return err}
     }
 
     static async updateLikes(musicId, userId) {
@@ -46,17 +46,14 @@ class Music{
             musicsList[index] = musicFound;
             saveMusicListToFile(FILE_PATH, musicsList)
             return true;
-        }catch(err){
-            console.log("ERREUR", err)
-            return false
-        }
+        }catch(err){return false}
     }
 
     static async getMusicFromId(musicId) {
         try {
             const musicsList = Music.getList();
             return musicsList.find((music) => music.id == musicId)
-        }catch(err){return false}
+        }catch(err){return err}
         
     }
 
