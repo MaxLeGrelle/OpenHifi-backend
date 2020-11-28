@@ -27,6 +27,13 @@ class User {
         }catch(err) {return false}
     }
 
+    /**
+     * Met à jour de maniére asynchrone la liste des musiques liked par l'utilisateur dont l'id est userId.
+     * Si la musique dont l'id est musicId se trouve déjà dans sa liste des musiques liked alors elle supprimé de sa liste
+     * sinon elle est ajouté à sa liste
+     * @param {*} musicId L'id de la musique à ajouter
+     * @param {*} userId L'id de l'utilisateur qui a liked/disliked
+     */
     static async updateMusicsLiked(musicId, userId) {
         try {
             if(!musicId || !userId) return false;
@@ -36,7 +43,6 @@ class User {
             const index = usersList.findIndex((user) => user.id == userFound.id)
             if (index < 0) return false;
             const i = userFound.musicsLiked.indexOf(musicId)
-            console.log("updateMusicsLiked :: i =", i)
             //unlike
             if (i >= 0) {
                 userFound.musicsLiked.splice(i, 1);
@@ -50,16 +56,24 @@ class User {
         
     }
 
+    /**
+     * Verifie de maniére asynchrone si la musique dont l'id vaut musicId se trouve déjà 
+     * dans la liste des musiques liked de l'utilisateur dont l'id est userId. 
+     * Si c'est le cas la fonction retourne true et false sinon.
+     * @param {*} userId l'id de l'utilisateur
+     * @param {*} musicId l'id de la musique
+     */
     static async isMusicLiked(userId, musicId) {
         const userFound = await User.getUserFromId(userId);
-        return userFound.musicsLiked.find((musicLikedId) => {
+        const musicFound = userFound.musicsLiked.find((musicLikedId) => {
             return musicLikedId == musicId;
         })
-        
+        if (musicFound == undefined) return false;
+        return true;
     }
 
     /**
-     * Retourne une liste d'utilisateur correspondant à un ou plusieurs mot clé se trouvant dans keyWords
+     * Retourne de maniére asynchrone une liste d'utilisateur correspondant à un ou plusieurs mot clé se trouvant dans keyWords
      * @param {*} keyWords liste de mot(s) clé(s)
      */
     static async searchUsers(keyWords) {
@@ -77,12 +91,23 @@ class User {
         }catch(err){return err}
     }
 
+    /**
+     * Permet d'incrémenter de maniére automatique l'id d'un nouvel utilisateur.
+     */
     static incId() {
         const userList = User.getList();
         if (!userList || userList.length === 0) return 0;
         return userList[userList.length-1].id + 1;
     }
 
+    /**
+     * Vérifie de maniére asynchrone si l'email et le password entré en paramétre corréspondant
+     * à un utilisateur existant, et si c'est le cas vérifie les deux mots de passes.
+     * Retourne true si l'utilisateur existe et que password est le même que le password crypté
+     * et false sinon.
+     * @param {*} email l'email de l'utilisateur 
+     * @param {*} password le mot de passe de l'utilisateur
+     */
     static async checkLoginData(email , password) {
         if (!email || !password) return false;
         console.log(password)
@@ -95,6 +120,7 @@ class User {
 
     /**
      * Return le User avec l'email email et le mot de passe password depuis la liste des users
+     * Return null si l'email en paramétre n'est pas valide
      * @param {*} email l'email du user
      * @param {*} password le mot de passe du user
      */
@@ -107,6 +133,12 @@ class User {
         return userFound;
     }
 
+    /**
+     * Retourne de maniére asynchrone l'utilisateur correspond à l'id donné en paramétre.
+     * Retourne null si l'id en paramétre n'est pas valide
+     * Retourne une erreur si l'opération a echoué
+     * @param {*} id l'id de l'utilisateur à renvoyer
+     */
     static async getUserFromId(id) {
         try {
             if (!id) return null;

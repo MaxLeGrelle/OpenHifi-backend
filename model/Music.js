@@ -28,6 +28,13 @@ class Music{
         }catch(err) {return err}
     }
 
+    /**
+     * Met à jour de maniére asynchrone le nombre de like d'une musique. Return false en cas d'erreur et true si le nombre de like a changé.
+     * Si la musique correspondant à l'id de musicId a déjà été liké par l'utilisateur correspondant à l'id de userId alors la musique est dislike
+     * sinon la musique est like
+     * @param {*} musicId l'id de la musique à liker/disliker
+     * @param {*} userId l'id the l'utilisateur ayant like ou dislike
+     */
     static async updateLikes(musicId, userId) {
         try { 
             if (!musicId || !userId) return false;
@@ -49,6 +56,11 @@ class Music{
         }catch(err){return false}
     }
 
+    /**
+     * Retourne de maniére asynchrone la musique correspond à l'id musicId. 
+     * Retourne l'erreur rencontré si il y en a eu une.
+     * @param {*} musicId l'id de la musique
+     */
     static async getMusicFromId(musicId) {
         try {
             const musicsList = Music.getList();
@@ -65,6 +77,10 @@ class Music{
         return getMusicsFromFile(FILE_PATH);
     }
 
+    /**
+     * Retourne la liste des id des musiques créée par l'utilisateur dont l'id est idCreator.
+     * @param {*} idCreator l'id du créateur de la musique.
+     */
     static getListMusicFromIdCreator(idCreator) {
         const musicList = Music.getList();
         return musicList.filter(music => {
@@ -72,6 +88,9 @@ class Music{
         })
     }
 
+    /**
+     * Permet d'incrémenter de maniére automatique l'id d'une nouvelle musique.
+     */
     static incId() {
         const musicList = Music.getList();
         if (!musicList || musicList.length === 0) return 0;
@@ -80,6 +99,11 @@ class Music{
 
 }
 
+/**
+ * écrit dans le fichier filePath pour sauvegarer la liste musicList
+ * @param {*} path le chemin vers le fichier
+ * @param {*} musicList la liste de musiques
+ */
 function saveMusicListToFile(path, musicList){
     const musicListToJson = JSON.stringify(musicList);
     console.log("Write musicList to file : ", musicListToJson);

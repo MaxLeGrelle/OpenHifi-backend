@@ -12,18 +12,21 @@ router.get('/notsafe', function(req, res, next) {
   return res.json(User.getList());
 });
 
-/*GET users*/
+/*GET la liste des users*/
 router.get('/', authorize, function(req, res, next) {
   return res.json(User.getList());
 });
 
+/**
+ * Get la liste des musiques créée par un utilisateur
+ */
 router.get('/profil/:id', function(req,res,next) {
   const usersMusicList = Music.getListMusicFromIdCreator(req.params.id);
   console.log("GET /profil/:id", usersMusicList)
   return res.json(usersMusicList)
 })
 
-/* Register a new user */ 
+/* Post un nouvel utilisateur */ 
 router.post('/register', function(req, res, next) {
   const newUser = new User(req.body.email, req.body.pseudo, req.body.password);
   newUser.save().then(() => {
@@ -34,6 +37,9 @@ router.post('/register', function(req, res, next) {
   }).catch((err) => res.status(500).send(err.message))
 })
 
+/**
+ * Login un utilisateur
+ */
 router.post('/login', function(req, res, next) {
   User.checkLoginData(req.body.email, req.body.password).then((match) => {
     if (match) {
@@ -47,6 +53,9 @@ router.post('/login', function(req, res, next) {
   
 }) 
 
+/**
+ * Get la liste des musiques likés par un utilisateur
+ */
 router.get('/favs/:id', function(req,res,next) {
   User.getUserFromId(req.params.id).then((userFound) => {
     if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
