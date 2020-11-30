@@ -1,5 +1,5 @@
 ### get user list notsafe
-GET http://localhost:9090/users/notsafe
+GET http://localhost:9090/api/users/notsafe
 
 
 ### post a new admin
