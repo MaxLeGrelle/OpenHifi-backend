@@ -22,6 +22,16 @@ Content-Type: application/json
     "password" : "azerty"
 }
 
+### post a new user
+POST http://localhost:9090/users/register
+Content-Type: application/json
+
+{
+    "email" : "guest1@gmail.com",
+    "pseudo" : "guest1",
+    "password" : "azerty"
+}
+
 ### post login a good user
 # @name login
 POST http://localhost:9090/users/login
@@ -50,3 +60,9 @@ Authorization: {{userToken}}
 ### get user list wrong token
 GET http://localhost:9090/users/
 Authorization: 1234
+
+### get music list created by the user with the id 1
+GET http://localhost:9090/users/profil/1
+
+### get all the musics liked from the user 1
+GET http://localhost:9090/users/favs/1

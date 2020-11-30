@@ -5,6 +5,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var musicsRouter = require('./routes/musics');
 
 var app = express();
 
@@ -15,5 +16,6 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/musics', musicsRouter);
 
 module.exports = app;

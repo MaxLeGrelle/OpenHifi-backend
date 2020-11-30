@@ -1,0 +1,48 @@
+
+### get Music List
+GET http://localhost:9090/musics/
+
+### post ajout de musique
+POST http://localhost:9090/musics/add
+Content-Type: application/json
+
+{
+    "title" : "tropPOPpourToi",
+    "filePath": "C:\\document\\tropPoPpourToi.mp3",
+    "idCreator" : 1,
+    "tag" : "pop"
+}
+
+### post ajout de musique 2
+POST http://localhost:9090/musics/add
+Content-Type: application/json
+
+{
+    "title" : "La dubstep oui",
+    "filePath": "C:\\document\\La_dubstep_oui.mp3",
+    "idCreator" : 1,
+    "tag" : "dubstep"
+}
+
+### post ajout de musique 3
+POST http://localhost:9090/musics/add
+Content-Type: application/json
+
+{
+    "title" : "Les vaches",
+    "filePath": "C:\\document\\jaimelesvaches.mp3",
+    "idCreator" : 2,
+    "tag" : "country"
+}
+
+### put like musique 1 du user 1
+PUT http://localhost:9090/musics/fav/1/1
+
+### put like musique 1 du user 2
+PUT http://localhost:9090/musics/fav/2/1
+
+### put like musique 2 du user 2
+PUT http://localhost:9090/musics/fav/2/2
+
+### get numbers of like of musique 1
+GET http://localhost:9090/musics/fav/1
