@@ -1,6 +1,7 @@
 "use strict"
 const fs = require("fs")
 const bcrypt = require("bcrypt");
+const { getList } = require("./Music");
 const FILE_PATH = __dirname + "/data/users.json";
 const SALT_ROUNDS= 10;
 
@@ -26,6 +27,7 @@ class User {
             return true;
         }catch(err) {return false}
     }
+    
 
     /**
      * Met à jour de maniére asynchrone la liste des musiques liked par l'utilisateur dont l'id est userId.
@@ -156,6 +158,25 @@ class User {
      */
     static getList() {
         return getUsersFromFile(FILE_PATH);
+    }
+
+    /**
+     * change le mot de passe d'un utilisateur
+     * @param {*} newPassword 
+     *
+     */
+    static async changePassword(userEmail, newPassword){
+        try{
+            if(!newPassword || !userEmail) return false;
+            const userFound = User.getUserFromEmail(userEmail);
+            let liste = User.getList();
+            const index = liste.findIndex((user) => user.id == userFound.id);
+            newPassword = await bcrypt.hash(newPassword, SALT_ROUNDS)
+            userFound.password = newPassword;
+            liste[index] = userFound;
+            saveUserListToFile(FILE_PATH, liste);
+            return true;
+        }catch(err){return err}
     }
 
 
