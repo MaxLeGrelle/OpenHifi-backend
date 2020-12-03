@@ -11,16 +11,20 @@ let corsOptions = {
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var musicsRouter = require('./routes/musics');
+var albumsRouter = require('./routes/albums');
 
 var app = express();
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+//fix payload to large when receiving base64 image/audio
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser());
+
 
 app.use('/api/', cors(corsOptions), indexRouter);
 app.use('/api/users', cors(corsOptions),usersRouter);
 app.use('/api/musics', cors(corsOptions),musicsRouter);
+app.use('/api/albums', cors(corsOptions),albumsRouter);
 
 module.exports = app;
