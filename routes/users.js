@@ -57,10 +57,9 @@ router.post('/login', function(req, res, next) {
  * Get la liste des musiques likés par un utilisateur
  */
 router.get('/favs/:id', function(req,res,next) {
-  User.getUserFromId(req.params.id).then((userFound) => {
-    if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
-    return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
-  }).catch((err) => res.status(500).send(err.message))
+  const userFound = User.getUserFromId(req.params.id)
+  if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
+  return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
 })
 
 module.exports = router;

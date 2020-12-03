@@ -38,7 +38,7 @@ class User {
         try {
             if(!musicId || !userId) return false;
             let usersList = User.getList();
-            const userFound = await User.getUserFromId(userId);
+            const userFound = User.getUserFromId(userId);
             if (!userFound) return false;
             const index = usersList.findIndex((user) => user.id == userFound.id)
             if (index < 0) return false;
@@ -64,7 +64,7 @@ class User {
      * @param {*} musicId l'id de la musique
      */
     static async isMusicLiked(userId, musicId) {
-        const userFound = await User.getUserFromId(userId);
+        const userFound = User.getUserFromId(userId);
         const musicFound = userFound.musicsLiked.find((musicLikedId) => {
             return musicLikedId == musicId;
         })
@@ -134,21 +134,18 @@ class User {
     }
 
     /**
-     * Retourne de maniére asynchrone l'utilisateur correspond à l'id donné en paramétre.
+     * Retourne l'utilisateur correspond à l'id donné en paramétre.
      * Retourne null si l'id en paramétre n'est pas valide
      * Retourne une erreur si l'opération a echoué
      * @param {*} id l'id de l'utilisateur à renvoyer
      */
-    static async getUserFromId(id) {
-        try {
-            if (!id) return null;
-            const userList = User.getList();
-            const userFound = userList.find((user) => { 
-                return user.id == id
-            })
-            return userFound;
-        }catch(err){return err}
-        
+    static getUserFromId(id) {
+        if (!id) return null;
+        const userList = User.getList();
+        const userFound = userList.find((user) => { 
+            return user.id == id
+        })
+        return userFound;
     }
 
     /**

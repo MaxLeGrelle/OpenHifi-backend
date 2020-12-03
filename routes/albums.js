@@ -1,16 +1,23 @@
 var express = require('express');
 const Album = require('../model/Album.js');
+const User = require('../model/User.js');
 var router = express.Router(); 
 
 router.get("/", function (req, res, next) {
     const albumList = Album.getList();
-    let image64list = new Array();
-    albumList.forEach(album => {
-        image64list.push(Album.getImage64(album.pathImage64));
+    let creatorList = new Array();
+    let image64List = new Array();
+    albumList.forEach((album)=> {
+        image64List.push(Album.getImage64(album.pathImage64));
+        const userFound = User.getUserFromId(album.idCreator);
+        if (userFound == null) creatorList.push("anonyme")
+        else creatorList.push(userFound.pseudo);
+        
     });
     return res.json({
         albumList : albumList,
-        image64 : image64list
+        image64List : image64List,
+        creatorList : creatorList
     });  
 })
 
