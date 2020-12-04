@@ -77,3 +77,12 @@ Content-Type: application/json
     "newPassword" : "qwerty",
     "oldPassword" : "azerty"
 }
+
+### put change bio
+PUT  http://localhost:9090/api/users/profil/bio
+Content-Type: application/json
+
+{
+    "email" : "guest1@gmail.com",
+    "bio" : "cool"
+}

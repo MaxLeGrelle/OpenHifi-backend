@@ -67,6 +67,14 @@ router.post('/profil/editPw', function(req, res, next){
 
 })
 
+router.put('/profil/bio', function(req, res, next){
+  const Bio = req.body.bio;
+  const email = req.body.email;
+  User.setBio(email, Bio).then(() =>{
+    return res.json({email : email, bio : Bio}) 
+    }).catch((err) => res.status(500).send(err.message))
+})
+
 /**
  * Get la liste des musiques likés par un utilisateur
  */

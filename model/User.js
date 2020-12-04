@@ -7,12 +7,13 @@ const SALT_ROUNDS= 10;
 
 
 class User {
-    constructor(email, pseudo, password, id = User.incId(), musicsLiked = []) {
+    constructor(email, pseudo, password, id = User.incId(), musicsLiked = [], biographie = "") {
         this.email = email;
         this.pseudo = pseudo;
         this.password = password;
         this.id = id;
         this.musicsLiked = musicsLiked;
+        this.biographie = biographie;
     }
 
     /**
@@ -173,6 +174,18 @@ class User {
             const index = liste.findIndex((user) => user.id == userFound.id);
             newPassword = await bcrypt.hash(newPassword, SALT_ROUNDS)
             userFound.password = newPassword;
+            liste[index] = userFound;
+            saveUserListToFile(FILE_PATH, liste);
+            return true;
+        }catch(err){return err}
+    }
+
+    static async setBio(userEmail, bio){
+        try{
+            const userFound = User.getUserFromEmail(userEmail);
+            let liste = User.getList();
+            const index = liste.findIndex((user) => user.id == userFound.id);
+            userFound.biographie = bio;
             liste[index] = userFound;
             saveUserListToFile(FILE_PATH, liste);
             return true;
