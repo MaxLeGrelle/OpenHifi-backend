@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### post a new user
-POST http://localhost:9090/users/register
+POST http://localhost:9090/api/users/register
 Content-Type: application/json
 
 {
@@ -66,3 +66,14 @@ GET http://localhost:9090/users/profil/1
 
 ### get all the musics liked from the user 1
 GET http://localhost:9090/users/favs/1
+
+
+### post change password
+POST http://localhost:9090/api/users/profil/editPw
+Content-Type: application/json
+
+{
+    "email" : "guest1@gmail.com",
+    "newPassword" : "qwerty",
+    "oldPassword" : "azerty"
+}

@@ -53,6 +53,20 @@ router.post('/login', function(req, res, next) {
   
 }) 
 
+router.post('/profil/editPw', function(req, res, next){
+   const NewPassword = req.body.newPassword;
+   const OldPassword = req.body.oldPassword;
+   const email  = req.body.email; 
+   User.checkLoginData(email, OldPassword).then((match) =>{
+     if(match){
+       User.changePassword(email, NewPassword).then(() =>{
+       return res.json({email : email, nouveauMdp : NewPassword}) 
+       }).catch((err) => res.status(500).send(err.message))
+     } else return res.status(401).send("Mauvais mot de passe")
+   })
+
+})
+
 /**
  * Get la liste des musiques likés par un utilisateur
  */
