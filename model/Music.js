@@ -3,12 +3,13 @@
 const fs = require("fs");
 const User = require("./User");
 const FILE_PATH = __dirname + "/data/musics.json";
+const FILE_PATH_MUSIC64 = __dirname + "/data/audios/";
 
 class Music{
 
-    constructor(title, filePath, idCreator, tag, id = Music.incId(), nbrLikes = 0){
+    constructor(title, pathMusic64, idCreator, tag = "", id = Music.incId(), nbrLikes = 0){
         this.title = title;
-        this.filePath = filePath;
+        this.pathMusic64 = pathMusic64;
         this.idCreator = idCreator;
         this.tag = tag;
         this.id = id;
@@ -25,6 +26,15 @@ class Music{
             console.log("save musicList updated : ", musicList)
             saveMusicListToFile(FILE_PATH, musicList);
             return true;
+        }catch(err) {return err}
+    }
+
+    static async saveMusic64(music64, titleMusic64) {
+        try{
+            const timestamp = Date.now();
+            const path = FILE_PATH_MUSIC64+"/"+timestamp+"-"+titleMusic64+".txt";
+            fs.writeFileSync(path, music64);
+            return path;
         }catch(err) {return err}
     }
 
