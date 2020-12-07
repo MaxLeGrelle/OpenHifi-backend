@@ -140,7 +140,6 @@ class User {
      * @param {*} id l'id de l'utilisateur à renvoyer
      */
     static getUserFromId(id) {
-        if (!id) return null;
         const userList = User.getList();
         const userFound = userList.find((user) => { 
             return user.id == id

@@ -11,8 +11,7 @@ router.get("/", function (req, res, next) {
     albumList.forEach((album)=> {
         image64List.push(Album.getImage64(album.pathImage64));
         const userFound = User.getUserFromId(album.idCreator);
-        if (userFound == null) creatorList.push("anonyme")
-        else creatorList.push(userFound.pseudo);
+        creatorList.push(userFound.pseudo);
         
     });
     return res.json({
@@ -46,6 +45,32 @@ router.post("/add", function (req, res, next) {
         }).catch((err) => res.status(500).send(err.message))
     })
     .catch((err) => res.status(500).send(err.message))
+})
+
+router.get("/:id", function (req, res, next) {
+    Album.getAlbumFromId(req.params.id).then((albumFound) => {
+        if (albumFound == undefined) return res.status(404).send("Aucun album avec l'id "+req.params.id+ " n'a été trouvé")
+        let listMusicsInfo = new Array();
+        let listMusics = new Array();
+        let i = 0;
+        albumFound.listIdMusics.forEach((musicId) => {
+            const musicFound = Music.getMusicFromId(musicId)
+            listMusicsInfo.push(musicFound)
+            const music64Found = Music.getMusic64(listMusicsInfo[i].pathMusic64)
+            listMusics.push(music64Found)
+            i++;
+        })
+        const creator = User.getUserFromId(albumFound.idCreator)
+        const image64 = Album.getImage64(albumFound.pathImage64)
+        return res.json({
+            name : albumFound.name,
+            listMusicsInfo : listMusicsInfo,
+            listMusics64 : listMusics,
+            creator : creator.pseudo,
+            image64 : image64,
+            nbrLikes : albumFound.nbrLikes
+        })
+    })
 })
 
 module.exports = router;

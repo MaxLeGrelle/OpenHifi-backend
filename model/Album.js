@@ -22,6 +22,12 @@ class Album {
         }catch(err) {return err}
     }
 
+    static async getAlbumFromId(albumId) {
+        const albumsList = Album.getList()
+        const album = albumsList.find(album => album.id == albumId);
+        return album;
+    }
+
     static async saveImage64(image64, nameImage64) {
         try{
             const timestamp = Date.now();
