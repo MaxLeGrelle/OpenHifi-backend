@@ -17,8 +17,8 @@ var app = express();
 
 app.use(logger('dev'));
 //fix payload to large when receiving base64 image/audio
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb', extended: true}));
+app.use(express.json({limit: '1000mb'}));
+app.use(express.urlencoded({limit: '1000mb', extended: true}));
 app.use(cookieParser());
 
 

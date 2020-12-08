@@ -1,2 +1,4 @@
 node_modules
-data
+model/data/*.json
+model/data/audios/*.txt
+model/data/images/*.txt
