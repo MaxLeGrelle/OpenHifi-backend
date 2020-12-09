@@ -26,7 +26,7 @@ router.post("/add", function (req, res, next) {
     req.body.listMusics.forEach((music) => {
         Music.saveMusic64(music.music64, music.title)
         .then((pathMusic64) => {
-            const newMusic = new Music(music.title, pathMusic64, req.body.idCreator)
+            const newMusic = new Music(music.title, pathMusic64, req.body.idCreator, music.duration)
             listIdMusics.push(newMusic.id)
             return newMusic.save()
         })
@@ -63,6 +63,7 @@ router.get("/:id", function (req, res, next) {
         const creator = User.getUserFromId(albumFound.idCreator)
         const image64 = Album.getImage64(albumFound.pathImage64)
         return res.json({
+            id : albumFound.id,
             name : albumFound.name,
             listMusicsInfo : listMusicsInfo,
             listMusics64 : listMusics,

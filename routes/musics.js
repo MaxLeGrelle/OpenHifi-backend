@@ -1,4 +1,3 @@
-const { response } = require('express');
 var express = require('express');
 var router = express.Router();
 const Music = require("../model/Music.js");
@@ -15,7 +14,7 @@ router.get('/', function(req,res,next){
  * Post une nouvelle musique
  */
 router.post('/add', function(req, res, next){
-    const newMusic = new Music(req.body.title, req.body.filePath, req.body.idCreator, req.body.tag);
+    const newMusic = new Music(req.body.title, req.body.filePath, req.body.idCreator, req.body.duration, req.body.tag);
     newMusic.save().then((saved)=> {
         if(saved) {
             return res.json({
