@@ -1,0 +1,20 @@
+###get albums
+GET http://localhost:9090/api/albums/
+
+### post new album
+POST http://localhost:9090/api/albums/add
+Content-Type: application/json
+
+{
+    "name" : "Stamina,",
+    "listMusics" : [
+            {"music64" : "audioEncodedInBase64","title" : "93mesures"},
+            {"music64" : "anOtherAudioInBase64","title" : "Moins un"}
+        ],
+    "idCreator" : 1,
+    "image64" : "exempleDeStringEncoderEnB64",
+    "image64Name" : "exemple.png"
+}
+
+### get album with id 11 ATTENTION PEUT FAIRE CRASH
+GET http://localhost:9090/api/albums/11
