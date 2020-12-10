@@ -13,22 +13,12 @@ Content-Type: application/json
 }
 
 ### post a new user
-POST http://localhost:9090/users/register
+POST http://localhost:9090/api/users/register
 Content-Type: application/json
 
 {
-    "email" : "guest@gmail.com",
-    "pseudo" : "guest",
-    "password" : "azerty"
-}
-
-### post a new user
-POST http://localhost:9090/users/register
-Content-Type: application/json
-
-{
-    "email" : "guest1@gmail.com",
-    "pseudo" : "guest1",
+    "email" : "jehan@gmail.com",
+    "pseudo" : "jehan",
     "password" : "azerty"
 }
 
@@ -62,7 +52,39 @@ GET http://localhost:9090/users/
 Authorization: 1234
 
 ### get music list created by the user with the id 1
-GET http://localhost:9090/users/profil/1
+GET http://localhost:9090/api/users/profil/1
 
 ### get all the musics liked from the user 1
-GET http://localhost:9090/users/favs/1
+GET http://localhost:9090/api/users/favs/1
+
+### post change password
+POST http://localhost:9090/api/users/profil/editPw
+Content-Type: application/json
+
+{
+    "email" : "guest1@gmail.com",
+    "newPassword" : "azerty",
+    "oldPassword" : "qwerty"
+}
+
+### put change bio
+PUT  http://localhost:9090/api/users/profil/bio
+Content-Type: application/json
+
+{
+    "id" : 4,
+    "bio" : "git oskur"
+}
+
+### put set image profil
+PUT  http://localhost:9090/api/users/profil/setImage
+Content-Type: application/json
+
+{
+    "image64": "allo",
+    "id" : 4,
+    "nameImage" : "yo"
+}
+
+###get a public profil
+GET  http://localhost:9090/api/users/profil/4
