@@ -84,5 +84,15 @@ Content-Type: application/json
 
 {
     "email" : "guest1@gmail.com",
-    "bio" : "cool"
+    "bio" : "trop cool ce site"
+}
+
+### put set image profil
+PUT  http://localhost:9090/api/users/profil/setImage
+Content-Type: application/json
+
+{
+    "image64": "allo",
+    "id" : 1,
+    "nameImage" : "yo"
 }

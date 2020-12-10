@@ -15,8 +15,8 @@ var musicsRouter = require('./routes/musics');
 var app = express();
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({limit:"1000mb"}));
+app.use(express.urlencoded({ limit:"1000mb", extended: true }));
 app.use(cookieParser());
 
 app.use('/api/', cors(corsOptions), indexRouter);

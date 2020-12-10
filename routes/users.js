@@ -69,11 +69,27 @@ router.post('/profil/editPw', function(req, res, next){
 
 router.put('/profil/bio', function(req, res, next){
   const Bio = req.body.bio;
-  const email = req.body.email;
-  User.setBio(email, Bio).then(() =>{
-    return res.json({email : email, bio : Bio}) 
+  const Id = req.body.id;
+  User.setBio(Id, Bio).then(() =>{
+    return res.json({id : Id, bio : Bio}) 
     }).catch((err) => res.status(500).send(err.message))
 })
+
+// router.get('/profil'), function(req, res, next){
+// }
+
+router.put('/profil/setImage/', function(req, res, next){
+  const Image64 = req.body.image64;
+  const Id = req.body.id;
+  const NameImage = req.body.nameImage 
+  User.saveImage64(Image64, NameImage).then((path) => {
+    User.setImage(Id, path).then((reponse) =>{
+      if(reponse) return res.json({id : Id, path : path})
+      else throw new Error("l'image ne s'est pas mise a jour");
+    })
+  }).catch((err) => res.status(500).send(err.message))
+})
+
 
 /**
  * Get la liste des musiques likés par un utilisateur

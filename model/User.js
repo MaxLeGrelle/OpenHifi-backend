@@ -4,16 +4,18 @@ const bcrypt = require("bcrypt");
 const { getList } = require("./Music");
 const FILE_PATH = __dirname + "/data/users.json";
 const SALT_ROUNDS= 10;
+const FILE_PATH_IMAGE64 = __dirname+"/data/images"
 
 
 class User {
-    constructor(email, pseudo, password, id = User.incId(), musicsLiked = [], biographie = "") {
+    constructor(email, pseudo, password, id = User.incId(), musicsLiked = [], biographie = "", pathImage = "") {
         this.email = email;
         this.pseudo = pseudo;
         this.password = password;
         this.id = id;
         this.musicsLiked = musicsLiked;
         this.biographie = biographie;
+        this.pathImage = pathImage;
     }
 
     /**
@@ -91,6 +93,42 @@ class User {
                 Array.prototype.push.apply(found, result) //fusionne 2 tabs
             }
             return found;
+        }catch(err){return err}
+    }
+
+    /**
+     * return the image's path  
+     * @param {*} image64 
+     * @param {*} nomImage 
+     */
+    static async saveImage64(image64, nomImage) {
+        try{
+            const timestamp = Date.now();
+            const path = FILE_PATH_IMAGE64+"/"+timestamp+ "-" +nomImage + ".txt";
+            fs.writeFileSync(path, image64);
+            return path;
+        }catch(err) {return err}
+    }
+
+    static async setImage(idUser, path){
+        try{
+            if(!idUser || !path ) return false;
+            const userFound = User.getUserFromId(idUser);
+            console.log("USERFOUND",userFound)
+            let liste = User.getList();
+            const index = liste.findIndex((user) =>{
+                // console.log("USERFOUND",userFound.id)
+                // console.log("USERID",user.id)
+                return user.id == userFound.id
+            
+            });
+            // console.log("INDEX", index)
+            // console.log("USER", userFound)
+
+            userFound.pathImage = path;
+            liste[index] = userFound;
+            saveUserListToFile(FILE_PATH, liste);
+            return true;
         }catch(err){return err}
     }
 
@@ -180,9 +218,9 @@ class User {
         }catch(err){return err}
     }
 
-    static async setBio(userEmail, bio){
+    static async setBio(id, bio){
         try{
-            const userFound = User.getUserFromEmail(userEmail);
+            const userFound = User.getUserFromId(id);
             let liste = User.getList();
             const index = liste.findIndex((user) => user.id == userFound.id);
             userFound.biographie = bio;
