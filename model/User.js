@@ -1,17 +1,21 @@
 "use strict"
 const fs = require("fs")
 const bcrypt = require("bcrypt");
+const { getList } = require("./Music");
 const FILE_PATH = __dirname + "/data/users.json";
 const SALT_ROUNDS= 10;
+const FILE_PATH_IMAGE64 = __dirname+"/data/images"
 
 
 class User {
-    constructor(email, pseudo, password, id = User.incId(), musicsLiked = []) {
+    constructor(email, pseudo, password, id = User.incId(), musicsLiked = [], biographie = "", pathImage = "") {
         this.email = email;
         this.pseudo = pseudo;
         this.password = password;
         this.id = id;
         this.musicsLiked = musicsLiked;
+        this.biographie = biographie;
+        this.pathImage = pathImage;
     }
 
     /**
@@ -26,6 +30,7 @@ class User {
             return true;
         }catch(err) {return false}
     }
+    
 
     /**
      * Met à jour de maniére asynchrone la liste des musiques liked par l'utilisateur dont l'id est userId.
@@ -38,7 +43,7 @@ class User {
         try {
             if(!musicId || !userId) return false;
             let usersList = User.getList();
-            const userFound = User.getUserFromId(userId);
+            const userFound = await User.getUserFromId(userId);
             if (!userFound) return false;
             const index = usersList.findIndex((user) => user.id == userFound.id)
             if (index < 0) return false;
@@ -64,7 +69,7 @@ class User {
      * @param {*} musicId l'id de la musique
      */
     static async isMusicLiked(userId, musicId) {
-        const userFound = User.getUserFromId(userId);
+        const userFound = await User.getUserFromId(userId);
         const musicFound = userFound.musicsLiked.find((musicLikedId) => {
             return musicLikedId == musicId;
         })
@@ -89,6 +94,45 @@ class User {
             }
             return found;
         }catch(err){return err}
+    }
+
+    /**
+     * return the image's path  
+     * @param {*} image64 
+     * @param {*} nomImage 
+     */
+    static async saveImage64(image64, nomImage) {
+        try{
+            const timestamp = Date.now();
+            const path = FILE_PATH_IMAGE64+"/"+timestamp+ "-" +nomImage + ".txt";
+            fs.writeFileSync(path, image64);
+            return path;
+        }catch(err) {return err}
+    }
+
+    static getImage64(image64){
+        return fs.readFileSync(image64).toString()
+    }
+
+    static async setImage(idUser, path){
+        try{
+            if(!idUser || !path ) return false;
+            const userFound = User.getUserFromId(idUser);
+            console.log("USERFOUND",userFound)
+            let liste = User.getList();
+            const index = liste.findIndex((user) =>{
+                return user.id == userFound.id
+            });
+            userFound.pathImage = path;
+            liste[index] = userFound;
+            saveUserListToFile(FILE_PATH, liste);
+            return true;
+        }catch(err){return err}
+    }
+
+    static getPublicInformations(idUser){
+        const userFound = User.getUserFromId(idUser);
+        return {pseudo : userFound.pseudo, bio: userFound.biographie, image: userFound.pathImage}
     }
 
     /**
@@ -134,17 +178,21 @@ class User {
     }
 
     /**
-     * Retourne l'utilisateur correspond à l'id donné en paramétre.
+     * Retourne de maniére asynchrone l'utilisateur correspond à l'id donné en paramétre.
      * Retourne null si l'id en paramétre n'est pas valide
      * Retourne une erreur si l'opération a echoué
      * @param {*} id l'id de l'utilisateur à renvoyer
      */
-    static getUserFromId(id) {
-        const userList = User.getList();
-        const userFound = userList.find((user) => { 
-            return user.id == id
-        })
-        return userFound;
+    static async getUserFromId(id) {
+        try {
+            if (!id) return null;
+            const userList = User.getList();
+            const userFound = userList.find((user) => { 
+                return user.id == id
+            })
+            return userFound;
+        }catch(err){return err}
+        
     }
 
     /**
@@ -152,6 +200,37 @@ class User {
      */
     static getList() {
         return getUsersFromFile(FILE_PATH);
+    }
+
+    /**
+     * change le mot de passe d'un utilisateur
+     * @param {*} newPassword 
+     *
+     */
+    static async changePassword(userEmail, newPassword){
+        try{
+            if(!newPassword || !userEmail) return false;
+            const userFound = User.getUserFromEmail(userEmail);
+            let liste = User.getList();
+            const index = liste.findIndex((user) => user.id == userFound.id);
+            newPassword = await bcrypt.hash(newPassword, SALT_ROUNDS)
+            userFound.password = newPassword;
+            liste[index] = userFound;
+            saveUserListToFile(FILE_PATH, liste);
+            return true;
+        }catch(err){return err}
+    }
+
+    static async setBio(id, bio){
+        try{
+            const userFound = User.getUserFromId(id);
+            let liste = User.getList();
+            const index = liste.findIndex((user) => user.id == userFound.id);
+            userFound.biographie = bio;
+            liste[index] = userFound;
+            saveUserListToFile(FILE_PATH, liste);
+            return true;
+        }catch(err){return err}
     }
 
 
