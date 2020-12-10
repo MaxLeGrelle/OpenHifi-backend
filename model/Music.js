@@ -3,16 +3,18 @@
 const fs = require("fs");
 const User = require("./User");
 const FILE_PATH = __dirname + "/data/musics.json";
+const FILE_PATH_MUSIC64 = __dirname + "/data/audios/";
 
 class Music{
 
-    constructor(title, filePath, idCreator, tag, id = Music.incId(), nbrLikes = 0){
+    constructor(title, pathMusic64, idCreator, duration, tag = "", id = Music.incId(), nbrLikes = 0){
         this.title = title;
-        this.filePath = filePath;
+        this.pathMusic64 = pathMusic64;
         this.idCreator = idCreator;
         this.tag = tag;
         this.id = id;
         this.nbrLikes = nbrLikes;
+        this.duration = duration
     }
 
      /**
@@ -22,10 +24,25 @@ class Music{
         try{
             const musicList = getMusicsFromFile(FILE_PATH);
             musicList.push(this);
-            console.log("save musicList updated : ", musicList)
             saveMusicListToFile(FILE_PATH, musicList);
             return true;
         }catch(err) {return err}
+    }
+
+    static async saveMusic64(music64, titleMusic64) {
+        try{
+            const timestamp = Date.now();
+            const path = FILE_PATH_MUSIC64+"/"+timestamp+"-"+titleMusic64+".txt";
+            fs.writeFileSync(path, music64);
+            return path;
+        }catch(err) {return err}
+    }
+
+    static getMusic64(pathMusic64) {
+        if (!fs.existsSync(pathMusic64)) return null;
+        const music64 = fs.readFileSync(pathMusic64);
+        if (!music64) return null;
+        return music64.toString();
     }
 
     /**
@@ -39,7 +56,7 @@ class Music{
         try { 
             if (!musicId || !userId) return false;
             let musicsList = Music.getList();
-            const musicFound = await Music.getMusicFromId(musicId);
+            const musicFound = Music.getMusicFromId(musicId);
             if (!musicFound) return false;
             const index = musicsList.findIndex((music) => music.id == musicFound.id)
             if (index < 0) return false;
@@ -57,15 +74,13 @@ class Music{
     }
 
     /**
-     * Retourne de maniére asynchrone la musique correspond à l'id musicId. 
+     * Retourne de maniére la musique correspond à l'id musicId. 
      * Retourne l'erreur rencontré si il y en a eu une.
      * @param {*} musicId l'id de la musique
      */
-    static async getMusicFromId(musicId) {
-        try {
-            const musicsList = Music.getList();
-            return musicsList.find((music) => music.id == musicId)
-        }catch(err){return err}
+    static getMusicFromId(musicId) {
+        const musicsList = Music.getList();
+        return musicsList.find((music) => music.id == musicId)
         
     }
 
@@ -73,7 +88,6 @@ class Music{
      * recupere la liste des musiques
      */
     static getList(){
-        console.log("Music getList");
         return getMusicsFromFile(FILE_PATH);
     }
 
@@ -106,7 +120,6 @@ class Music{
  */
 function saveMusicListToFile(path, musicList){
     const musicListToJson = JSON.stringify(musicList);
-    console.log("Write musicList to file : ", musicListToJson);
     fs.writeFileSync(path, musicListToJson);
 }
 
