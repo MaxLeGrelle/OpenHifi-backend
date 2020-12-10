@@ -46,7 +46,7 @@ router.post('/login', function(req, res, next) {
       const UserFound = User.getUserFromEmail(req.body.email);
       jwt.sign({email : req.body.email, id : UserFound.id, pseudo : UserFound.pseudo}, jwtKey, {expiresIn : TOKEN_LIFETIME}, (err,token) => {
         if (err) return res.status(500).send(err);
-        return res.json({email : req.body.email, token})
+        return res.json({email : req.body.email,musicsLiked : UserFound.musicsLiked ,token : token})
       })
     }else return res.status(401).send("Mauvais email ou mot de passe")
   })
