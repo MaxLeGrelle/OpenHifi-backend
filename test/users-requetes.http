@@ -93,6 +93,9 @@ Content-Type: application/json
 
 {
     "image64": "allo",
-    "id" : 1,
+    "id" : 9,
     "nameImage" : "yo"
 }
+
+###get a public profil
+GET  http://localhost:9090/api/users/profil/9

@@ -43,7 +43,7 @@ class User {
         try {
             if(!musicId || !userId) return false;
             let usersList = User.getList();
-            const userFound = await User.getUserFromId(userId);
+            const userFound = User.getUserFromId(userId);
             if (!userFound) return false;
             const index = usersList.findIndex((user) => user.id == userFound.id)
             if (index < 0) return false;
@@ -69,7 +69,7 @@ class User {
      * @param {*} musicId l'id de la musique
      */
     static async isMusicLiked(userId, musicId) {
-        const userFound = await User.getUserFromId(userId);
+        const userFound = User.getUserFromId(userId);
         const musicFound = userFound.musicsLiked.find((musicLikedId) => {
             return musicLikedId == musicId;
         })
@@ -110,6 +110,10 @@ class User {
         }catch(err) {return err}
     }
 
+    static getImage64(image64){
+        return fs.readFileSync(image64).toString()
+    }
+
     static async setImage(idUser, path){
         try{
             if(!idUser || !path ) return false;
@@ -117,19 +121,18 @@ class User {
             console.log("USERFOUND",userFound)
             let liste = User.getList();
             const index = liste.findIndex((user) =>{
-                // console.log("USERFOUND",userFound.id)
-                // console.log("USERID",user.id)
                 return user.id == userFound.id
-            
             });
-            // console.log("INDEX", index)
-            // console.log("USER", userFound)
-
             userFound.pathImage = path;
             liste[index] = userFound;
             saveUserListToFile(FILE_PATH, liste);
             return true;
         }catch(err){return err}
+    }
+
+    static getPublicInformations(idUser){
+        const userFound = User.getUserFromId(idUser);
+        return {pseudo : userFound.pseudo, bio: userFound.biographie, image: userFound.pathImage}
     }
 
     /**
@@ -175,21 +178,17 @@ class User {
     }
 
     /**
-     * Retourne de maniére asynchrone l'utilisateur correspond à l'id donné en paramétre.
+     * Retourne l'utilisateur correspond à l'id donné en paramétre.
      * Retourne null si l'id en paramétre n'est pas valide
      * Retourne une erreur si l'opération a echoué
      * @param {*} id l'id de l'utilisateur à renvoyer
      */
-    static async getUserFromId(id) {
-        try {
-            if (!id) return null;
-            const userList = User.getList();
-            const userFound = userList.find((user) => { 
-                return user.id == id
-            })
-            return userFound;
-        }catch(err){return err}
-        
+    static getUserFromId(id) {
+        const userList = User.getList();
+        const userFound = userList.find((user) => { 
+            return user.id == id
+        })
+        return userFound;
     }
 
     /**

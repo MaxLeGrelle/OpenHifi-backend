@@ -4,6 +4,7 @@ const User = require("../model/User.js")
 const Music = require("../model/Music.js")
 const jwt = require("jsonwebtoken");
 const authorize = require('../utils/auths.js');
+const { getPublicInformations } = require('../model/User.js');
 const jwtKey = "dsogi j-8 qsùfmlds!"
 const TOKEN_LIFETIME = 24 * 60 * 60 * 1000 //24h
 
@@ -22,8 +23,9 @@ router.get('/', authorize, function(req, res, next) {
  */
 router.get('/profil/:id', function(req,res,next) {
   const usersMusicList = Music.getListMusicFromIdCreator(req.params.id);
-  console.log("GET /profil/:id", usersMusicList)
-  return res.json(usersMusicList)
+  let user = User.getPublicInformations(req.params.id);
+  user.image = User.getImage64(user.image)
+  return res.json({musicList :usersMusicList, userInfo: user})
 })
 
 /* Post un nouvel utilisateur */ 
@@ -75,16 +77,13 @@ router.put('/profil/bio', function(req, res, next){
     }).catch((err) => res.status(500).send(err.message))
 })
 
-// router.get('/profil'), function(req, res, next){
-// }
-
 router.put('/profil/setImage/', function(req, res, next){
   const Image64 = req.body.image64;
   const Id = req.body.id;
-  const NameImage = req.body.nameImage 
+  const NameImage = req.body.nameImage;
   User.saveImage64(Image64, NameImage).then((path) => {
     User.setImage(Id, path).then((reponse) =>{
-      if(reponse) return res.json({id : Id, path : path})
+      if(reponse) return res.json({id : Id, image64 : Image64})
       else throw new Error("l'image ne s'est pas mise a jour");
     })
   }).catch((err) => res.status(500).send(err.message))
@@ -95,10 +94,9 @@ router.put('/profil/setImage/', function(req, res, next){
  * Get la liste des musiques likés par un utilisateur
  */
 router.get('/favs/:id', function(req,res,next) {
-  User.getUserFromId(req.params.id).then((userFound) => {
-    if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
-    return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
-  }).catch((err) => res.status(500).send(err.message))
+  const userFound = User.getUserFromId(req.params.id)
+  if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
+  return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
 })
 
 module.exports = router;
