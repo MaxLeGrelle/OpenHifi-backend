@@ -46,7 +46,7 @@ router.post('/login', function(req, res, next) {
       const UserFound = User.getUserFromEmail(req.body.email);
       jwt.sign({email : req.body.email, id : UserFound.id, pseudo : UserFound.pseudo}, jwtKey, {expiresIn : TOKEN_LIFETIME}, (err,token) => {
         if (err) return res.status(500).send(err);
-        return res.json({email : req.body.email,musicsLiked : UserFound.musicsLiked ,token : token})
+        return res.json({email : req.body.email, token})
       })
     }else return res.status(401).send("Mauvais email ou mot de passe")
   })
@@ -71,9 +71,10 @@ router.post('/profil/editPw', function(req, res, next){
  * Get la liste des musiques likés par un utilisateur
  */
 router.get('/favs/:id', function(req,res,next) {
-  const userFound = User.getUserFromId(req.params.id)
-  if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
-  return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
+  User.getUserFromId(req.params.id).then((userFound) => {
+    if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
+    return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
+  }).catch((err) => res.status(500).send(err.message))
 })
 
 module.exports = router;
