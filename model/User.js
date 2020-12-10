@@ -6,12 +6,13 @@ const SALT_ROUNDS= 10;
 
 
 class User {
-    constructor(email, pseudo, password, id = User.incId(), musicsLiked = []) {
+    constructor(email, pseudo, password, id = User.incId(), musicsLiked = [], albumsRecentlyListened = []) {
         this.email = email;
         this.pseudo = pseudo;
         this.password = password;
         this.id = id;
         this.musicsLiked = musicsLiked;
+        this.albumsRecentlyListened = albumsRecentlyListened;
     }
 
     /**

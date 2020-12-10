@@ -62,4 +62,10 @@ router.get('/favs/:id', function(req,res,next) {
   return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
 })
 
+router.get('/recently/:id', function(req, res, next) {
+  const userFound = User.getUserFromId(req.params.id)
+  if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
+  return res.json({albumsRecentlyPlayed : userFound.albumsRecentlyPlayed})
+})
+
 module.exports = router;
