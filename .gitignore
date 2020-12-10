@@ -1,4 +1,1 @@
 node_modules
-model/data/*.json
-model/data/audios/*.txt
-model/data/images/*.txt
