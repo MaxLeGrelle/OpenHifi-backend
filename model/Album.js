@@ -22,7 +22,7 @@ class Album {
         }catch(err) {return err}
     }
 
-    static async getAlbumFromId(albumId) {
+    static getAlbumFromId(albumId) {
         const albumsList = Album.getList()
         const album = albumsList.find(album => album.id == albumId);
         return album;
