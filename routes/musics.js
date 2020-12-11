@@ -56,4 +56,17 @@ router.get('/fav/:id', function (req,res,next) {
 
 })
 
+/**
+ * Get une musique
+ */
+router.get("/:idUser", function (req, res, next) {
+   let user = User.getUserFromId(req.params.idUser)
+   let listeMusic = []
+   user.musicsLiked.forEach(id =>{
+    music = Music.getMusicFromId(id)
+    listeMusic.push(music)
+   })
+   return res.json(listeMusic)
+})
+
 module.exports = router;
