@@ -34,7 +34,7 @@ router.post('/register', function(req, res, next) {
   newUser.save().then(() => {
     jwt.sign({email : req.body.email, id : newUser.id, pseudo : newUser.pseudo}, jwtKey, {expiresIn : TOKEN_LIFETIME}, (err,token) => {
       if (err) return res.status(500).send(err);
-      return res.json({email : req.body.email, id : newUser.id, token})
+      return res.json({email : req.body.email, pseudo : newUser.pseudo, id : newUser.id, token})
     })
   }).catch((err) => res.status(500).send(err.message))
 })
