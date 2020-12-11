@@ -90,13 +90,14 @@ class User {
         }catch(err) {return err}
     }
 
-    static getImage64(image64){
-        return fs.readFileSync(image64).toString()
+    static getImage64(pathImage64){
+        if (!pathImage64) return "";
+        return fs.readFileSync(pathImage64).toString()
     }
 
     static async setImage(idUser, path){
         try{
-            if(!idUser || !path ) return false;
+            if(idUser == undefined || !path ) return false;
             const userFound = User.getUserFromId(idUser);
             console.log("USERFOUND",userFound)
             let liste = User.getList();
@@ -112,7 +113,7 @@ class User {
 
     static getPublicInformations(idUser){
         const userFound = User.getUserFromId(idUser);
-        return {pseudo : userFound.pseudo, bio: userFound.biographie, image: userFound.pathImage}
+        return {pseudo : userFound.pseudo, bio: userFound.biographie, pathImage: userFound.pathImage}
     }
 
     /**
