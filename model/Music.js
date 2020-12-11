@@ -7,13 +7,14 @@ const FILE_PATH_MUSIC64 = __dirname + "/data/audios/";
 
 class Music{
 
-    constructor(title, pathMusic64, idCreator, tag = "", id = Music.incId(), nbrLikes = 0){
+    constructor(title, pathMusic64, idCreator, duration, tag = "", id = Music.incId(), nbrLikes = 0){
         this.title = title;
         this.pathMusic64 = pathMusic64;
         this.idCreator = idCreator;
         this.tag = tag;
         this.id = id;
         this.nbrLikes = nbrLikes;
+        this.duration = duration
     }
 
      /**
@@ -23,7 +24,6 @@ class Music{
         try{
             const musicList = getMusicsFromFile(FILE_PATH);
             musicList.push(this);
-            console.log("save musicList updated : ", musicList)
             saveMusicListToFile(FILE_PATH, musicList);
             return true;
         }catch(err) {return err}
@@ -88,7 +88,6 @@ class Music{
      * recupere la liste des musiques
      */
     static getList(){
-        console.log("Music getList");
         return getMusicsFromFile(FILE_PATH);
     }
 
@@ -121,7 +120,6 @@ class Music{
  */
 function saveMusicListToFile(path, musicList){
     const musicListToJson = JSON.stringify(musicList);
-    console.log("Write musicList to file : ", musicListToJson);
     fs.writeFileSync(path, musicListToJson);
 }
 
