@@ -53,6 +53,7 @@ router.get("/:id", function (req, res, next) {
         let listMusicsInfo = new Array();
         let listMusics = new Array();
         let i = 0;
+        
         albumFound.listIdMusics.forEach((musicId) => {
             const musicFound = Music.getMusicFromId(musicId)
             listMusicsInfo.push(musicFound)
