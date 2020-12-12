@@ -21,7 +21,7 @@ class Music {
     }
 
     /**
-    * Ajoute de maniere asynchrone this à la liste des musiques et sauvegarde la liste modifiée
+    * Ajoute this à la liste des musiques et sauvegarde la liste modifiée
     */
     save() {
 
@@ -77,7 +77,7 @@ class Music {
     }
 
     /**
-     * Retourne de maniére la musique correspond à l'id musicId. 
+     * Retourne la musique correspond à l'id musicId. 
      * Retourne l'erreur rencontré si il y en a eu une.
      * @param {*} musicId l'id de la musique
      */
