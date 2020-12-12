@@ -1,7 +1,7 @@
 "use strict"
 const fs = require("fs")
 const bcrypt = require("bcrypt");
-const FILE_PATH = __dirname + "/data/users.json";
+const FILE_PATH = __dirname + "/data/usersData.json";
 const SALT_ROUNDS= 10;
 const FILE_PATH_IMAGE64 = __dirname+"/data/images"
 

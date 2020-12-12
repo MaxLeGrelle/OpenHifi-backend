@@ -1,6 +1,6 @@
 "use strict"
 const fs = require("fs");
-const FILE_PATH = __dirname + "/data/albums.json";
+const FILE_PATH = __dirname + "/data/albumsData.json";
 const FILE_PATH_IMAGE64 = __dirname + "/data/images";
 
 class Album {

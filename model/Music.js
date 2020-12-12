@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const User = require("./User");
-const FILE_PATH = __dirname + "/data/musics.json";
+const FILE_PATH = __dirname + "/data/musicsData.json";
 const FILE_PATH_MUSIC64 = __dirname + "/data/audios/";
 
 class Music {
