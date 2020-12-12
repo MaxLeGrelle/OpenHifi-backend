@@ -72,8 +72,8 @@ router.post('/profil/editPw', function(req, res, next){
 router.put('/profil/bio', function(req, res, next){
   const Bio = req.body.bio;
   const Id = req.body.id;
-  User.setBio(Id, Bio).then(() =>{
-    return res.json({id : Id, bio : Bio}) 
+  User.setBio(Id, Bio).then((toReturn) =>{
+    return res.json(toReturn)
     }).catch((err) => res.status(500).send(err.message))
 })
 

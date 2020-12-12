@@ -4,17 +4,17 @@ const bcrypt = require("bcrypt");
 const FILE_PATH = __dirname + "/data/usersData.json";
 const SALT_ROUNDS= 10;
 const FILE_PATH_IMAGE64 = __dirname+"/data/images"
-
+const escape = require("escape-html")
 
 class User {
     constructor(email, pseudo, password, id = User.incId(), musicsLiked = [], albumsRecentlyListened = [], biographie = "", pathImage = "") {
         this.email = email;
-        this.pseudo = pseudo;
+        this.pseudo = escape(pseudo);
         this.password = password;
         this.id = id;
         this.musicsLiked = musicsLiked;
         this.albumsRecentlyListened = albumsRecentlyListened;
-        this.biographie = biographie;
+        this.biographie = escape(biographie);
         this.pathImage = pathImage;
     }
 
@@ -99,7 +99,6 @@ class User {
         try{
             if(idUser == undefined || !path ) return false;
             const userFound = User.getUserFromId(idUser);
-            console.log("USERFOUND",userFound)
             let liste = User.getList();
             const index = liste.findIndex((user) =>{
                 return user.id == userFound.id
@@ -154,7 +153,6 @@ class User {
      */
     static async checkLoginData(email , password) {
         if (!email || !password) return false;
-        console.log(password)
         const userToVerify = User.getUserFromEmail(email);
         if (!userToVerify) return false;
         try {
@@ -221,10 +219,10 @@ class User {
             const userFound = User.getUserFromId(id);
             let liste = User.getList();
             const index = liste.findIndex((user) => user.id == userFound.id);
-            userFound.biographie = bio;
+            userFound.biographie = escape(bio);
             liste[index] = userFound;
             saveUserListToFile(FILE_PATH, liste);
-            return true;
+            return {id : id, bio : userFound.biographie};
         }catch(err){return err}
     }
 

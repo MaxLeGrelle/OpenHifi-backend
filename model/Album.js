@@ -2,10 +2,11 @@
 const fs = require("fs");
 const FILE_PATH = __dirname + "/data/albumsData.json";
 const FILE_PATH_IMAGE64 = __dirname + "/data/images";
+const escape = require("escape-html")
 
 class Album {
     constructor(name, listIdMusics, idCreator, pathImage64, nbrLikes = 0, id = Album.incId()) {
-        this.name = name;
+        this.name = escape(name);
         this.listIdMusics = listIdMusics;
         this.idCreator = idCreator;
         this.pathImage64 = pathImage64;
@@ -14,9 +15,7 @@ class Album {
     }
 
     save() {
-
         const albumsList = getAlbumsFromFile(FILE_PATH)
-        console.log(this)
         albumsList.push(this);
         saveAlbumListToFile(FILE_PATH, albumsList);
         return true;
