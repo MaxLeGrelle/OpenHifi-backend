@@ -127,4 +127,11 @@ router.get("/recently/:id", function (req, res, next) {
   })
 })
 
+router.get("/image/:id", function(req, res, next) {
+  const userFound = User.getUserFromId(req.params.id)
+  if (!userFound) res.status(404).send("Aucun utilisateur avec l'id " + req.params.id + " n'a été trouvé")
+  const image64 = User.getImage64(userFound.pathImage)
+  return res.json({image64 : image64})
+})
+
 module.exports = router;
