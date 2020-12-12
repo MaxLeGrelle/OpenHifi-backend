@@ -43,30 +43,29 @@ router.post("/add", function (req, res, next) {
 })
 
 router.get("/:id", function (req, res, next) {
-    Album.getAlbumFromId(req.params.id).then((albumFound) => {
-        if (albumFound == undefined) return res.status(404).send("Aucun album avec l'id " + req.params.id + " n'a été trouvé")
-        let listMusicsInfo = new Array();
-        let listMusics = new Array();
-        let i = 0;
+    const albumFound = Album.getAlbumFromId(req.params.id)
+    if (albumFound == undefined) return res.status(404).send("Aucun album avec l'id " + req.params.id + " n'a été trouvé")
+    let listMusicsInfo = new Array();
+    let listMusics = new Array();
+    let i = 0;
 
-        albumFound.listIdMusics.forEach((musicId) => {
-            const musicFound = Music.getMusicFromId(musicId)
-            listMusicsInfo.push(musicFound)
-            const music64Found = Music.getMusic64(listMusicsInfo[i].pathMusic64)
-            listMusics.push(music64Found)
-            i++;
-        })
-        const creator = User.getUserFromId(albumFound.idCreator)
-        const image64 = Album.getImage64(albumFound.pathImage64)
-        return res.json({
-            id: albumFound.id,
-            name: albumFound.name,
-            listMusicsInfo: listMusicsInfo,
-            listMusics64: listMusics,
-            creator: creator.pseudo,
-            image64: image64,
-            nbrLikes: albumFound.nbrLikes
-        })
+    albumFound.listIdMusics.forEach((musicId) => {
+        const musicFound = Music.getMusicFromId(musicId)
+        listMusicsInfo.push(musicFound)
+        const music64Found = Music.getMusic64(listMusicsInfo[i].pathMusic64)
+        listMusics.push(music64Found)
+        i++;
+    })
+    const creator = User.getUserFromId(albumFound.idCreator)
+    const image64 = Album.getImage64(albumFound.pathImage64)
+    return res.json({
+        id: albumFound.id,
+        name: albumFound.name,
+        listMusicsInfo: listMusicsInfo,
+        listMusics64: listMusics,
+        creator: creator.pseudo,
+        image64: image64,
+        nbrLikes: albumFound.nbrLikes
     })
 })
 
