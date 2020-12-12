@@ -228,6 +228,19 @@ class User {
         }catch(err){return err}
     }
 
+    static async setRecentlyListened(id, recentlyListened) {
+        try {
+            if(id == undefined || !recentlyListened) return false;
+            const userFound = User.getUserFromId(id)
+            let users = User.getList();
+            const index = users.findIndex((user) => user.id == id)
+            userFound.albumsRecentlyListened = recentlyListened;
+            users[index] = userFound;
+            saveUserListToFile(FILE_PATH, users)
+            return recentlyListened;
+        }catch(err){return err}
+    }
+
 
 }
 

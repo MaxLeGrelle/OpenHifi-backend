@@ -88,3 +88,14 @@ Content-Type: application/json
 
 ###get a public profil
 GET  http://localhost:9090/api/users/profil/4
+
+### put recently listened user 0
+PUT http://localhost:9090/api/users/recently/0
+Content-Type: application/json
+
+{
+    "recentlyListened": []
+}
+
+### put recently listened user 0
+GET http://localhost:9090/api/albums/recently/0

@@ -5,6 +5,7 @@ const Music = require("../model/Music.js")
 const { getPublicInformations } = require('../model/User.js');
 const jwt = require("jsonwebtoken");
 const authorize = require('../utils/auths.js');
+const Album = require('../model/Album.js');
 const jwtKey = "dsogi j-8 qsùfmlds!"
 const TOKEN_LIFETIME = 24 * 60 * 60 * 1000 //24h
 
@@ -48,7 +49,7 @@ router.post('/login', function(req, res, next) {
       const UserFound = User.getUserFromEmail(req.body.email);
       jwt.sign({email : req.body.email, id : UserFound.id, pseudo : UserFound.pseudo}, jwtKey, {expiresIn : TOKEN_LIFETIME}, (err,token) => {
         if (err) return res.status(500).send(err);
-        return res.json({email : req.body.email,pseudo : UserFound.pseudo, musicsLiked : UserFound.musicsLiked ,token : token})
+        return res.json({email : req.body.email,pseudo : UserFound.pseudo, musicsLiked : UserFound.musicsLiked, recentlyListened : UserFound.albumsRecentlyListened,token : token})
       })
     }else return res.status(401).send("Mauvais email ou mot de passe")
   })
@@ -93,14 +94,37 @@ router.put('/profil/setImage/', function(req, res, next){
  */
 router.get('/favs/:id', function(req,res,next) {
   const userFound = User.getUserFromId(req.params.id)
-  if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
+  if(userFound == null) return res.status(404).send("Aucun utilisateur avec l'id", req.params.id, "n'a été trouvé")
   return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
 })
 
-router.get('/recently/:id', function(req, res, next) {
+router.put('/recently/:id', function(req, res ,next) {
+  console.log(req.body.recentlyListened)
+  User.setRecentlyListened(req.params.id, req.body.recentlyListened).then((recentlyListened) => {
+    if (!recentlyListened) return res.status(500).send("Erreur lors de la mise à jour de la liste des albums ecoutés récemment")
+    return res.json({id : req.params.id, recentlyListened : recentlyListened})
+  }).catch((err) => res.status(500).send("Erreur : "+err))
+})
+
+router.get("/recently/:id", function (req, res, next) {
   const userFound = User.getUserFromId(req.params.id)
-  if(userFound == null) return res.status(500).send("Probleme lors de la récupération de l'utilisateur depuis son id")
-  return res.json({albumsRecentlyPlayed : userFound.albumsRecentlyPlayed})
+  if (!userFound) return res.status(404).send("Aucun utilisateur avec l'id " + req.params.id + " n'a été trouvé")
+  let albumRecentlyListened = new Array();
+  let creatorList = new Array();
+  let image64List = new Array();
+  userFound.albumsRecentlyListened.forEach((id) => {
+      const album = Album.getAlbumFromId(id);
+      const creator = User.getUserFromId(album.idCreator)
+      const image64 = Album.getImage64(album.pathImage64)
+      albumRecentlyListened.push(album)
+      creatorList.push(creator.pseudo)
+      image64List.push(image64)
+  })
+  return res.json({
+      albumRecentlyListened: albumRecentlyListened,
+      creatorList : creatorList,
+      image64List: image64List
+  })
 })
 
 module.exports = router;
