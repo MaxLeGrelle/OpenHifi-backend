@@ -6,8 +6,10 @@
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www"
   },
-  "nodemonConfig":{
-    "ignore":["data/*"]
+  "nodemonConfig": {
+    "ignore": [
+      "data/*"
+    ]
   },
   "dependencies": {
     "bcrypt": "^5.0.0",

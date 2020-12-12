@@ -5,37 +5,40 @@ const User = require("./User");
 const FILE_PATH = __dirname + "/data/musics.json";
 const FILE_PATH_MUSIC64 = __dirname + "/data/audios/";
 
-class Music{
+class Music {
 
-    constructor(title, pathMusic64, idCreator, duration, tag = "", id = Music.incId(), nbrLikes = 0){
+    constructor(title, pathMusic64, idCreator, duration, pathImage64, album,idAlbum, tag = "", id = Music.incId(), nbrLikes = 0) {
         this.title = title;
         this.pathMusic64 = pathMusic64;
         this.idCreator = idCreator;
         this.tag = tag;
         this.id = id;
         this.nbrLikes = nbrLikes;
-        this.duration = duration
+        this.duration = duration;
+        this.pathImage64 = pathImage64;
+        this.album = album;
+        this.idAlbum = idAlbum;
     }
 
-     /**
-     * Ajoute de maniere asynchrone this à la liste des musiques et sauvegarde la liste modifiée
-     */
-    async save() {
-        try{
-            const musicList = getMusicsFromFile(FILE_PATH);
-            musicList.push(this);
-            saveMusicListToFile(FILE_PATH, musicList);
-            return true;
-        }catch(err) {return err}
+    /**
+    * Ajoute this à la liste des musiques et sauvegarde la liste modifiée
+    */
+    save() {
+
+        const musicList = getMusicsFromFile(FILE_PATH);
+        musicList.push(this);
+        saveMusicListToFile(FILE_PATH, musicList);
+        return true;
+
     }
 
-    static async saveMusic64(music64, titleMusic64) {
-        try{
-            const timestamp = Date.now();
-            const path = FILE_PATH_MUSIC64+"/"+timestamp+"-"+titleMusic64+".txt";
-            fs.writeFileSync(path, music64);
-            return path;
-        }catch(err) {return err}
+    static saveMusic64(music64, titleMusic64) {
+
+        const timestamp = Date.now();
+        const path = FILE_PATH_MUSIC64 + "/" + timestamp + "-" + titleMusic64 + ".txt";
+        fs.writeFileSync(path, music64);
+        return path;
+
     }
 
     static getMusic64(pathMusic64) {
@@ -53,7 +56,7 @@ class Music{
      * @param {*} userId l'id the l'utilisateur ayant like ou dislike
      */
     static async updateLikes(musicId, userId) {
-        try { 
+        try {
             if (!musicId || !userId) return false;
             let musicsList = Music.getList();
             const musicFound = Music.getMusicFromId(musicId);
@@ -62,32 +65,32 @@ class Music{
             if (index < 0) return false;
             //unlike
             if (await User.isMusicLiked(userId, musicId)) {
-                if(musicFound.nbrLikes == 0) return false;
+                if (musicFound.nbrLikes == 0) return false;
                 musicFound.nbrLikes--;
-            }else { //like
+            } else { //like
                 musicFound.nbrLikes++;
             }
             musicsList[index] = musicFound;
             saveMusicListToFile(FILE_PATH, musicsList)
             return true;
-        }catch(err){return false}
+        } catch (err) { return false }
     }
 
     /**
-     * Retourne de maniére la musique correspond à l'id musicId. 
+     * Retourne la musique correspond à l'id musicId. 
      * Retourne l'erreur rencontré si il y en a eu une.
      * @param {*} musicId l'id de la musique
      */
     static getMusicFromId(musicId) {
         const musicsList = Music.getList();
         return musicsList.find((music) => music.id == musicId)
-        
+
     }
 
     /**
      * recupere la liste des musiques
      */
-    static getList(){
+    static getList() {
         return getMusicsFromFile(FILE_PATH);
     }
 
@@ -108,7 +111,7 @@ class Music{
     static incId() {
         const musicList = Music.getList();
         if (!musicList || musicList.length === 0) return 0;
-        return musicList[musicList.length-1].id + 1;
+        return musicList[musicList.length - 1].id + 1;
     }
 
 }
@@ -118,7 +121,7 @@ class Music{
  * @param {*} path le chemin vers le fichier
  * @param {*} musicList la liste de musiques
  */
-function saveMusicListToFile(path, musicList){
+function saveMusicListToFile(path, musicList) {
     const musicListToJson = JSON.stringify(musicList);
     fs.writeFileSync(path, musicListToJson);
 }
@@ -128,7 +131,7 @@ function saveMusicListToFile(path, musicList){
  * return une liste vide si le fichier n'a pas été trouvé
  * @param {*} path le chemin vers le fichier
  */
-function getMusicsFromFile(path){
+function getMusicsFromFile(path) {
     if (!fs.existsSync(path)) return [];
     const rawData = fs.readFileSync(path);
     if (!rawData) return [];
