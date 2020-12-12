@@ -46,3 +46,6 @@ PUT http://localhost:9090/musics/fav/2/2
 
 ### get numbers of like of musique 1
 GET http://localhost:9090/musics/fav/1
+
+### get music liked of user 3
+GET http://localhost:9090/api/musics/3

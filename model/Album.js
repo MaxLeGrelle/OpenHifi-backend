@@ -13,13 +13,14 @@ class Album {
         this.id = id;
     }
 
-    async save() {
-        try{
-            const albumsList = getAlbumsFromFile(FILE_PATH)
-            albumsList.push(this);
-            saveAlbumListToFile(FILE_PATH, albumsList);
-            return true;
-        }catch(err) {return err}
+    save() {
+
+        const albumsList = getAlbumsFromFile(FILE_PATH)
+        console.log(this)
+        albumsList.push(this);
+        saveAlbumListToFile(FILE_PATH, albumsList);
+        return true;
+
     }
 
     static getAlbumFromId(albumId) {
@@ -28,19 +29,19 @@ class Album {
         return album;
     }
 
-    static async saveImage64(image64, nameImage64) {
-        try{
-            const timestamp = Date.now();
-            const path = FILE_PATH_IMAGE64+"/"+timestamp+"-"+nameImage64+".txt";
-            fs.writeFileSync(path, image64);
-            return path;
-        }catch(err) {return err}
+    static saveImage64(image64, nameImage64) {
+
+        const timestamp = Date.now();
+        const path = FILE_PATH_IMAGE64 + "/" + timestamp + "-" + nameImage64 + ".txt";
+        fs.writeFileSync(path, image64);
+        return path;
+
     }
 
     static incId() {
         const albumsList = Album.getList();
         if (!albumsList || albumsList.length === 0) return 0;
-        return albumsList[albumsList.length-1].id + 1;
+        return albumsList[albumsList.length - 1].id + 1;
     }
 
     static getList() {
@@ -53,7 +54,7 @@ class Album {
         if (!image64) return null;
         return image64.toString();
     }
-    
+
 }
 
 
@@ -63,7 +64,7 @@ class Album {
  * @param {*} path the path to the file
  * @param {*} albumList the list of albums
  */
-function saveAlbumListToFile(path, albumList){
+function saveAlbumListToFile(path, albumList) {
     const albumListToJson = JSON.stringify(albumList);
     fs.writeFileSync(path, albumListToJson);
 }
@@ -73,7 +74,7 @@ function saveAlbumListToFile(path, albumList){
  * return an empty list if path does not exist
  * @param {*} path the path of the file
  */
-function getAlbumsFromFile(path){
+function getAlbumsFromFile(path) {
     if (!fs.existsSync(path)) return [];
     const rawData = fs.readFileSync(path);
     if (!rawData) return [];

@@ -17,4 +17,4 @@ Content-Type: application/json
 }
 
 ### get album with id 11 ATTENTION PEUT FAIRE CRASH
-GET http://localhost:9090/api/albums/11
+GET http://localhost:9090/api/albums/0
