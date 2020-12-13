@@ -53,7 +53,6 @@ router.get('/fav/:id', function (req,res,next) {
     Music.getMusicFromId(req.params.id).then((musicFound) => {
         return res.json({id : musicFound.id, title : musicFound.title, likes : musicFound.nbrLikes});
     }).catch((err) => res.status(500).send(err.message))
-
 })
 
 /**

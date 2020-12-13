@@ -1,9 +1,8 @@
-
 ### get Music List
-GET http://localhost:9090/musics/
+GET http://localhost:9090/api/musics/
 
 ### post ajout de musique
-POST http://localhost:9090/musics/add
+POST http://localhost:9090/api/musics/add
 Content-Type: application/json
 
 {
@@ -14,7 +13,7 @@ Content-Type: application/json
 }
 
 ### post ajout de musique 2
-POST http://localhost:9090/musics/add
+POST http://localhost:9090/api/musics/add
 Content-Type: application/json
 
 {
@@ -25,7 +24,7 @@ Content-Type: application/json
 }
 
 ### post ajout de musique 3
-POST http://localhost:9090/musics/add
+POST http://localhost:9090/api/musics/add
 Content-Type: application/json
 
 {
@@ -36,16 +35,16 @@ Content-Type: application/json
 }
 
 ### put like musique 1 du user 1
-PUT http://localhost:9090/musics/fav/1/1
+PUT http://localhost:9090/api/musics/fav/1/1
 
 ### put like musique 1 du user 2
-PUT http://localhost:9090/musics/fav/2/1
+PUT http://localhost:9090/api/musics/fav/2/1
 
 ### put like musique 2 du user 2
-PUT http://localhost:9090/musics/fav/2/2
+PUT http://localhost:9090/api/musics/fav/2/2
 
 ### get numbers of like of musique 1
-GET http://localhost:9090/musics/fav/1
+GET http://localhost:9090/api/musics/fav/1
 
 ### get music liked of user 3
 GET http://localhost:9090/api/musics/3

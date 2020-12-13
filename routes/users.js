@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const User = require("../model/User.js")
 const Music = require("../model/Music.js")
-const { getPublicInformations } = require('../model/User.js');
 const jwt = require("jsonwebtoken");
 const authorize = require('../utils/auths.js');
 const Album = require('../model/Album.js');
@@ -53,7 +52,6 @@ router.post('/login', function(req, res, next) {
       })
     }else return res.status(401).send("Mauvais email ou mot de passe")
   })
-  
 })
 
 router.post('/profil/editPw', function(req, res, next){
@@ -99,7 +97,6 @@ router.get('/favs/:id', function(req,res,next) {
 })
 
 router.put('/recently/:id', function(req, res ,next) {
-  console.log(req.body.recentlyListened)
   User.setRecentlyListened(req.params.id, req.body.recentlyListened).then((recentlyListened) => {
     if (!recentlyListened) return res.status(500).send("Erreur lors de la mise à jour de la liste des albums ecoutés récemment")
     return res.json({id : req.params.id, recentlyListened : recentlyListened})

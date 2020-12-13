@@ -1,5 +1,4 @@
 "use strict"
-
 const fs = require("fs");
 const User = require("./User");
 const FILE_PATH = __dirname + "/data/musicsData.json";
@@ -7,7 +6,6 @@ const FILE_PATH_MUSIC64 = __dirname + "/data/audios/";
 const escape = require("escape-html")
 
 class Music {
-
     constructor(title, pathMusic64, idCreator, duration, pathImage64, album,idAlbum, tag = "", id = Music.incId(), nbrLikes = 0) {
         this.title = escape(title);
         this.pathMusic64 = pathMusic64;
@@ -25,12 +23,10 @@ class Music {
     * Ajoute this à la liste des musiques et sauvegarde la liste modifiée
     */
     save() {
-
         const musicList = getMusicsFromFile(FILE_PATH);
         musicList.push(this);
         saveMusicListToFile(FILE_PATH, musicList);
         return true;
-
     }
 
     static saveMusic64(music64, titleMusic64) {
@@ -39,7 +35,6 @@ class Music {
         const path = FILE_PATH_MUSIC64 + "/" + timestamp + "-" + title + ".txt";
         fs.writeFileSync(path, music64);
         return path;
-
     }
 
     static getMusic64(pathMusic64) {
@@ -85,7 +80,6 @@ class Music {
     static getMusicFromId(musicId) {
         const musicsList = Music.getList();
         return musicsList.find((music) => music.id == musicId)
-
     }
 
     /**
@@ -114,7 +108,6 @@ class Music {
         if (!musicList || musicList.length === 0) return 0;
         return musicList[musicList.length - 1].id + 1;
     }
-
 }
 
 /**
