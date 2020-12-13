@@ -2,6 +2,7 @@
 const fs = require("fs");
 const FILE_PATH = __dirname + "/data/albumsData.json";
 const FILE_PATH_IMAGE64 = __dirname + "/data/images";
+const FILE_PATH_IMAGE64_DEFAULT = __dirname + "/data/imageDefault/imageDefault.txt";
 const escape = require("escape-html")
 
 class Album {
@@ -40,10 +41,14 @@ class Album {
      * @param {*} nameImage64 name of the image
      */
     static saveImage64(image64, nameImage64) {
-
-        const timestamp = Date.now();
-        const path = FILE_PATH_IMAGE64 + "/" + timestamp + "-" + nameImage64 + ".txt";
-        fs.writeFileSync(path, image64);
+        let path
+        if (!image64) {
+            path = FILE_PATH_IMAGE64_DEFAULT
+        }else {
+            const timestamp = Date.now();
+            path = FILE_PATH_IMAGE64 + "/" + timestamp + "-" + nameImage64 + ".txt";
+            fs.writeFileSync(path, image64);
+        }
         return path;
     }
 
