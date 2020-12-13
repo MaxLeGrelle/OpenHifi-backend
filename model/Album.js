@@ -14,6 +14,9 @@ class Album {
         this.id = id;
     }
 
+    /**
+     * add this to the album list and save the modifed list
+     */
     save() {
         const albumsList = getAlbumsFromFile(FILE_PATH)
         albumsList.push(this);
@@ -21,12 +24,21 @@ class Album {
         return true;
     }
 
+    /**
+     * Retrieve the id albumId from the json
+     * @param {*} albumId album's id
+     */
     static getAlbumFromId(albumId) {
         const albumsList = Album.getList()
         const album = albumsList.find(album => album.id == albumId);
         return album;
     }
 
+    /**
+     * create a new file which contains the image in base64
+     * @param {*} image64 image in base 64
+     * @param {*} nameImage64 name of the image
+     */
     static saveImage64(image64, nameImage64) {
 
         const timestamp = Date.now();
@@ -35,16 +47,27 @@ class Album {
         return path;
     }
 
+    /**
+     * Automatically increment the id when an album is created
+     */
     static incId() {
         const albumsList = Album.getList();
         if (!albumsList || albumsList.length === 0) return 0;
         return albumsList[albumsList.length - 1].id + 1;
     }
 
+    /**
+     * Retrieve the album's list 
+     */
     static getList() {
         return getAlbumsFromFile(FILE_PATH);
     }
 
+
+    /**
+     * Retrieve the base 64 image
+     * @param {*} pathImage64 path to the file
+     */
     static getImage64(pathImage64) {
         if (!fs.existsSync(pathImage64)) return null;
         const image64 = fs.readFileSync(pathImage64);
