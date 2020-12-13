@@ -64,7 +64,8 @@ router.get("/:idUser", function (req, res, next) {
    let listeMusic = []
    user.musicsLiked.forEach(id =>{
     music = Music.getMusicFromId(id)
-    listeMusic.push(music)
+    let creator = User.getUserFromId(music.idCreator)
+    listeMusic.push({music : music, creator: creator.pseudo})
    })
    return res.json(listeMusic)
 })
