@@ -72,8 +72,8 @@ router.post('/profil/editPw', function(req, res, next){
 router.put('/profil/bio', function(req, res, next){
   const Bio = req.body.bio;
   const Id = req.body.id;
-  User.setBio(Id, Bio).then(() =>{
-    return res.json({id : Id, bio : Bio}) 
+  User.setBio(Id, Bio).then((toReturn) =>{
+    return res.json(toReturn)
     }).catch((err) => res.status(500).send(err.message))
 })
 
@@ -125,6 +125,13 @@ router.get("/recently/:id", function (req, res, next) {
       creatorList : creatorList,
       image64List: image64List
   })
+})
+
+router.get("/image/:id", function(req, res, next) {
+  const userFound = User.getUserFromId(req.params.id)
+  if (!userFound) res.status(404).send("Aucun utilisateur avec l'id " + req.params.id + " n'a été trouvé")
+  const image64 = User.getImage64(userFound.pathImage)
+  return res.json({image64 : image64})
 })
 
 module.exports = router;

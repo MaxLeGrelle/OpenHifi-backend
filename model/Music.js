@@ -4,11 +4,12 @@ const fs = require("fs");
 const User = require("./User");
 const FILE_PATH = __dirname + "/data/musicsData.json";
 const FILE_PATH_MUSIC64 = __dirname + "/data/audios/";
+const escape = require("escape-html")
 
 class Music {
 
     constructor(title, pathMusic64, idCreator, duration, pathImage64, album,idAlbum, tag = "", id = Music.incId(), nbrLikes = 0) {
-        this.title = title;
+        this.title = escape(title);
         this.pathMusic64 = pathMusic64;
         this.idCreator = idCreator;
         this.tag = tag;
@@ -16,7 +17,7 @@ class Music {
         this.nbrLikes = nbrLikes;
         this.duration = duration;
         this.pathImage64 = pathImage64;
-        this.album = album;
+        this.album = escape(album);
         this.idAlbum = idAlbum;
     }
 
@@ -33,9 +34,9 @@ class Music {
     }
 
     static saveMusic64(music64, titleMusic64) {
-
+        let title = titleMusic64.replace("/","-") //replace '/' because writeFileSync will throw "no such file or directory"
         const timestamp = Date.now();
-        const path = FILE_PATH_MUSIC64 + "/" + timestamp + "-" + titleMusic64 + ".txt";
+        const path = FILE_PATH_MUSIC64 + "/" + timestamp + "-" + title + ".txt";
         fs.writeFileSync(path, music64);
         return path;
 
