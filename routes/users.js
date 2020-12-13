@@ -13,13 +13,15 @@ router.get('/notsafe', function(req, res, next) {
   return res.json(User.getList());
 });
 
-/*GET la liste des users*/
+/**
+ * GET users list
+ */
 router.get('/', authorize, function(req, res, next) {
   return res.json(User.getList());
 });
 
 /**
- * Get la liste des musiques créée par un utilisateur
+ * Get list of musics created by a user
  */
 router.get('/profil/:id', function(req,res,next) {
   const usersMusicList = Music.getListMusicFromIdCreator(req.params.id);
@@ -28,7 +30,9 @@ router.get('/profil/:id', function(req,res,next) {
   return res.json({musicList :usersMusicList, userInfo: user})
 })
 
-/* Post un nouvel utilisateur */ 
+/**
+ * POST new user
+ */
 router.post('/register', function(req, res, next) {
   const newUser = new User(req.body.email, req.body.pseudo, req.body.password);
   newUser.save().then(() => {
@@ -40,7 +44,7 @@ router.post('/register', function(req, res, next) {
 })
 
 /**
- * Login un utilisateur
+ * POST connect the user
  */
 router.post('/login', function(req, res, next) {
   User.checkLoginData(req.body.email, req.body.password).then((match) => {
@@ -54,6 +58,9 @@ router.post('/login', function(req, res, next) {
   })
 })
 
+/**
+ * POST now password
+ */
 router.post('/profil/editPw', function(req, res, next){
   const NewPassword = req.body.newPassword;
   const OldPassword = req.body.oldPassword;
@@ -67,6 +74,9 @@ router.post('/profil/editPw', function(req, res, next){
   })
 })
 
+/**
+ * UPDATE bio
+ */
 router.put('/profil/bio', function(req, res, next){
   const Bio = req.body.bio;
   const Id = req.body.id;
@@ -75,6 +85,9 @@ router.put('/profil/bio', function(req, res, next){
     }).catch((err) => res.status(500).send(err.message))
 })
 
+/**
+ * UPDATE image of the user
+ */
 router.put('/profil/setImage/', function(req, res, next){
   const Image64 = req.body.image64;
   const Id = req.body.id;
@@ -96,6 +109,9 @@ router.get('/favs/:id', function(req,res,next) {
   return res.json({id : userFound.id, email : userFound.email, musicsLiked : userFound.musicsLiked})
 })
 
+/**
+ * UPDATE list of albums recently listened
+ */
 router.put('/recently/:id', function(req, res ,next) {
   User.setRecentlyListened(req.params.id, req.body.recentlyListened).then((recentlyListened) => {
     if (!recentlyListened) return res.status(500).send("Erreur lors de la mise à jour de la liste des albums ecoutés récemment")
@@ -103,6 +119,9 @@ router.put('/recently/:id', function(req, res ,next) {
   }).catch((err) => res.status(500).send("Erreur : "+err))
 })
 
+/**
+ * GET list of albums recently listened 
+ */
 router.get("/recently/:id", function (req, res, next) {
   const userFound = User.getUserFromId(req.params.id)
   if (!userFound) return res.status(404).send("Aucun utilisateur avec l'id " + req.params.id + " n'a été trouvé")
@@ -124,6 +143,9 @@ router.get("/recently/:id", function (req, res, next) {
   })
 })
 
+/**
+ * GET user's image
+ */
 router.get("/image/:id", function(req, res, next) {
   const userFound = User.getUserFromId(req.params.id)
   if (!userFound) res.status(404).send("Aucun utilisateur avec l'id " + req.params.id + " n'a été trouvé")

@@ -3,7 +3,7 @@ const User = require('../model/User');
 var router = express.Router();
 
 /**
- * Get le(s) résultats de la recherche d'utilisateurs par le(s) mot(s) clé(s)
+ * GET research result
  */
 router.get('/research/:keyWords', function(req, res, next) {
   const keyWords = req.params.keyWords.split(" ");
