@@ -4,14 +4,14 @@ const Music = require("../model/Music.js");
 const User = require('../model/User.js');
 
 /**
- * Get la liste des musiques
+ * GET musics list
  */
 router.get('/', function(req,res,next){
   return res.json(Music.getList());  
 })
 
 /**
- * Post une nouvelle musique
+ * PPOST new music
  */
 router.post('/add', function(req, res, next){
     const newMusic = new Music(req.body.title, req.body.filePath, req.body.idCreator, req.body.duration, req.body.tag);
@@ -27,7 +27,7 @@ router.post('/add', function(req, res, next){
 })
 
 /**
- * Update le nombre de like d'une musique et la liste des musiques liked d'un utilisateur
+ * PUT number of like of a music and the musicLiked list of the user
  */
 router.put('/fav/:userId/:musicId', function(req, res, next) {
     Music.updateLikes(req.params.musicId, req.params.userId).then((worked) => {
@@ -47,7 +47,7 @@ router.put('/fav/:userId/:musicId', function(req, res, next) {
 })
 
 /**
- * Get le nombre de like d'une musique
+ * GET the number of like from a music
  */
 router.get('/fav/:id', function (req,res,next) {
     Music.getMusicFromId(req.params.id).then((musicFound) => {
@@ -56,7 +56,7 @@ router.get('/fav/:id', function (req,res,next) {
 })
 
 /**
- * Get une musique
+ * GET music which has been created by idUser
  */
 router.get("/:idUser", function (req, res, next) {
    let user = User.getUserFromId(req.params.idUser)

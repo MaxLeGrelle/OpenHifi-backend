@@ -19,8 +19,8 @@ class User {
     }
 
     /**
-     * Ajoute de maniere asynchrone this à la liste des users et sauvegarde la liste modifié
-     */
+    * Add this asynchronously to the list of users and save the modified list
+    */
     async save() {
         try {
             const userList = getUsersFromFile(FILE_PATH);
@@ -32,11 +32,11 @@ class User {
     }
 
     /**
-     * Met à jour de maniére asynchrone la liste des musiques liked par l'utilisateur dont l'id est userId.
-     * Si la musique dont l'id est musicId se trouve déjà dans sa liste des musiques liked alors elle supprimé de sa liste
-     * sinon elle est ajouté à sa liste
-     * @param {*} musicId L'id de la musique à ajouter
-     * @param {*} userId L'id de l'utilisateur qui a liked/disliked
+     * Update asynchronously the list of musics liked by the user with the id userId.
+     * If the music with the id mucicId is already in his list of liked musics then it is deleted.
+     * else it is added to his list
+     * @param {*} musicId music's id
+     * @param {*} userId user's id
      */
     static async updateMusicsLiked(musicId, userId) {
         try {
@@ -63,8 +63,10 @@ class User {
      * Verifie de maniére asynchrone si la musique dont l'id vaut musicId se trouve déjà 
      * dans la liste des musiques liked de l'utilisateur dont l'id est userId. 
      * Si c'est le cas la fonction retourne true et false sinon.
-     * @param {*} userId l'id de l'utilisateur
-     * @param {*} musicId l'id de la musique
+     * Verify asynchronously if the music with the id musicId is already in the list of musics liked
+     * of the user with the id userId. If it's the case, return true else false.
+     * @param {*} userId user's id
+     * @param {*} musicId music's id
      */
     static async isMusicLiked(userId, musicId) {
         const userFound = User.getUserFromId(userId);
@@ -76,9 +78,9 @@ class User {
     }
 
     /**
-     * return the image's path  
-     * @param {*} image64 
-     * @param {*} nomImage 
+     * create a new file which contains the image in base64
+     * @param {*} image64 image in base 64
+     * @param {*} nomImage name of the image
      */
     static async saveImage64(image64, nomImage) {
         try{
@@ -89,11 +91,20 @@ class User {
         }catch(err) {return err}
     }
 
+    /**
+     *  Retrieve the base 64 music
+     * @param {*} pathImage64 path to the file
+     */
     static getImage64(pathImage64){
         if (!pathImage64) return "";
         return fs.readFileSync(pathImage64).toString()
     }
 
+    /**
+     * Update the image of the user with the id idUser and save the new file
+     * @param {*} idUser user's id
+     * @param {*} path path of the new image
+     */
     static async setImage(idUser, path){
         try{
             if(idUser == undefined || !path ) return false;
@@ -109,14 +120,18 @@ class User {
         }catch(err){return err}
     }
 
+    /**
+     * Retreive all the data related to the profil of the user with the id idUser
+     * @param {*} idUser user's id
+     */
     static getPublicInformations(idUser){
         const userFound = User.getUserFromId(idUser);
         return {pseudo : userFound.pseudo, bio: userFound.biographie, pathImage: userFound.pathImage}
     }
 
     /**
-     * Retourne de maniére asynchrone une liste d'utilisateur correspondant à un ou plusieurs mot clé se trouvant dans keyWords
-     * @param {*} keyWords liste de mot(s) clé(s)
+     * Return asynchronously a list of user which match with the one or more keywords
+     * @param {*} keyWords list of key words
      */
     static async searchUsers(keyWords) {
         try {
@@ -127,15 +142,15 @@ class User {
                 result = userList.filter((user) => {
                     return user.pseudo.toLowerCase().includes(keyWords[i].toLowerCase())
                 })
-                Array.prototype.push.apply(found, result) //fusionne 2 tabs
+                Array.prototype.push.apply(found, result)
             }
             return found;
         }catch(err){return err}
     }
 
     /**
-     * Permet d'incrémenter de maniére automatique l'id d'un nouvel utilisateur.
-     */
+    * Automatically increment the id when a user is created
+    */
     static incId() {
         const userList = User.getList();
         if (!userList || userList.length === 0) return 0;
@@ -143,12 +158,11 @@ class User {
     }
 
     /**
-     * Vérifie de maniére asynchrone si l'email et le password entré en paramétre corréspondant
-     * à un utilisateur existant, et si c'est le cas vérifie les deux mots de passes.
-     * Retourne true si l'utilisateur existe et que password est le même que le password crypté
-     * et false sinon.
-     * @param {*} email l'email de l'utilisateur 
-     * @param {*} password le mot de passe de l'utilisateur
+     * Verify asynchronously if the email and the password in paramater match
+     * with an existing user. If it's the case, the method will verify both password.
+     * Return true if the user exists and the password are the same, else return false
+     * @param {*} email user's email
+     * @param {*} password user's password
      */
     static async checkLoginData(email , password) {
         if (!email || !password) return false;
@@ -160,8 +174,7 @@ class User {
     }
 
     /**
-     * Return le User avec l'email email et le mot de passe password depuis la liste des users
-     * Return null si l'email en paramétre n'est pas valide
+     * Return the user with the email and password in parameter from the list of users
      * @param {*} email l'email du user
      * @param {*} password le mot de passe du user
      */
@@ -175,10 +188,8 @@ class User {
     }
 
     /**
-     * Retourne l'utilisateur correspond à l'id donné en paramétre.
-     * Retourne null si l'id en paramétre n'est pas valide
-     * Retourne une erreur si l'opération a echoué
-     * @param {*} id l'id de l'utilisateur à renvoyer
+     * Return the user with the id id or return an error if the operation failed
+     * @param {*} id user's id
      */
     static getUserFromId(id) {
         const userList = User.getList();
@@ -189,16 +200,15 @@ class User {
     }
 
     /**
-     * Récupere la liste des users du fichier users.json
+     * Retrieve the list of users from the json
      */
     static getList() {
         return getUsersFromFile(FILE_PATH);
     }
 
     /**
-     * change le mot de passe d'un utilisateur
-     * @param {*} newPassword 
-     *
+     * change the password with the newPassword
+     * @param {*} newPassword new password
      */
     static async changePassword(userEmail, newPassword){
         try{
@@ -213,6 +223,12 @@ class User {
             return true;
         }catch(err){return err}
     }
+
+    /**
+     * Updata the bio
+     * @param {*} id user's id
+     * @param {*} bio user's new bio
+     */
     static async setBio(id, bio){
         try{
             const userFound = User.getUserFromId(id);
@@ -225,6 +241,11 @@ class User {
         }catch(err){return err}
     }
 
+    /**
+     * Update the the list of recently listend albums of the user with id id
+     * @param {*} id user's id
+     * @param {*} recentlyListened new recently listened list
+     */
     static async setRecentlyListened(id, recentlyListened) {
         try {
             if(id == undefined || !recentlyListened) return false;
@@ -242,9 +263,9 @@ class User {
 }
 
 /**
- * écrit dans le fichier filePath pour sauvegarer la liste userList
- * @param {*} filePath chemin vers le fichier json
- * @param {*} userList liste de User
+ * Write in the file path to save the list userList
+ * @param {*} filePath the path to the file
+ * @param {*} userList the list of users
  */
 function saveUserListToFile(filePath, userList){
     const userListToJson = JSON.stringify(userList);
@@ -252,9 +273,9 @@ function saveUserListToFile(filePath, userList){
 }
 
 /**
- * Récupere la liste des users se trouvant dans filePath, 
- * return une liste vide si le fichier n'a pas été trouvé
- * @param {*} filePath le chemin vers le fichier
+ * Return the list of users in path 
+ * return an empty list if path does not exist
+ * @param {*} path the path of the file
  */
 function getUsersFromFile(filePath) {
     if (!fs.existsSync(filePath)) return [];

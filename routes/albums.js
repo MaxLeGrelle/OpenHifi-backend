@@ -4,6 +4,9 @@ const Music = require('../model/Music.js');
 const User = require('../model/User.js');
 var router = express.Router();
 
+/**
+ * GET the list of albums
+ */
 router.get("/", function (req, res, next) {
     const albumList = Album.getList();
     let creatorList = new Array();
@@ -20,6 +23,9 @@ router.get("/", function (req, res, next) {
     });
 })
 
+/**
+ * POST a new album
+ */
 router.post("/add", function (req, res, next) {
     const pathImage64 = Album.saveImage64(req.body.image64, req.body.imageName)
     let nbrAlb = Album.getList()
@@ -40,6 +46,9 @@ router.post("/add", function (req, res, next) {
     })
 })
 
+/**
+ * GET the album with the id :id
+ */
 router.get("/:id", function (req, res, next) {
     const albumFound = Album.getAlbumFromId(req.params.id)
     if (albumFound == undefined) return res.status(404).send("Aucun album avec l'id " + req.params.id + " n'a été trouvé")
