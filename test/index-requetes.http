@@ -1,2 +1,2 @@
 ### GET result from search
-GET http://localhost:9090/research/g v
+GET http://localhost:9090/api/research/g v

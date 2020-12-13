@@ -12,7 +12,6 @@ router.get("/", function (req, res, next) {
         image64List.push(Album.getImage64(album.pathImage64));
         const userFound = User.getUserFromId(album.idCreator);
         creatorList.push(userFound.pseudo);
-
     });
     return res.json({
         albumList: albumList,
@@ -27,7 +26,6 @@ router.post("/add", function (req, res, next) {
     let listIdMusics = new Array()
     req.body.listMusics.forEach((music) => {
         const pathMusic64 = Music.saveMusic64(music.music64, music.title)
-
         const newMusic = new Music(music.title, pathMusic64, req.body.idCreator, music.duration, pathImage64, req.body.name, nbrAlb.length)
         listIdMusics.push(newMusic.id)
         newMusic.save()

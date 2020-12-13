@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const jwtKey = "dsogi j-8 qsùfmlds!"
-const TOKEN_LIFETIME = 24 * 60 * 60 * 1000 //24h
 const User = require("../model/User.js")
 
 function authorize(req, res, next) {

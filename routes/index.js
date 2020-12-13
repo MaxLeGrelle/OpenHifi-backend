@@ -10,7 +10,6 @@ router.get('/research/:keyWords', function(req, res, next) {
   User.searchUsers(keyWords).then((usersFound) => {
     return res.json(usersFound)
   }).catch((err) => res.status(500).send(err.message))
-  
 })
 
 module.exports = router;

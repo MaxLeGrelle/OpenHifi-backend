@@ -19,7 +19,6 @@ class Album {
         albumsList.push(this);
         saveAlbumListToFile(FILE_PATH, albumsList);
         return true;
-
     }
 
     static getAlbumFromId(albumId) {
@@ -34,7 +33,6 @@ class Album {
         const path = FILE_PATH_IMAGE64 + "/" + timestamp + "-" + nameImage64 + ".txt";
         fs.writeFileSync(path, image64);
         return path;
-
     }
 
     static incId() {

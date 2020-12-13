@@ -57,7 +57,6 @@ class User {
             saveUserListToFile(FILE_PATH, usersList)
             return true;
         }catch (err){return false}
-        
     }
 
     /**
